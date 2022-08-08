@@ -52,10 +52,7 @@ def teardown_module(module):
     fs = [f for f in [FILENAME_STACK_RAW, FILENAME_MAP_RAW] if os.path.exists(f)]
 
     for f in fs:
-        try:
-            os.remove(f)
-        except Exception as e:
-            print(e)
+        os.remove(f)
 
 
 @pytest.mark.parametrize("lazy", (False, True))

@@ -455,8 +455,8 @@ class JobinYvonXMLReader:
             self.metadata["Sample"] = {}
         if "Acquisition_instrument" not in self.metadata:
             self.metadata["Acquisition_instrument"] = {
-                "Laser": {"Filter": {}},
-                "Spectrometer": {"Grating": {}},
+                "Laser": {"Filter": {}, "Polarizer": {}},
+                "Spectrometer": {"Grating": {}, "Polarizer": {}},
                 "Detector": {"processing": {}},
                 "Spectral_image": {},
             }
@@ -502,7 +502,7 @@ class JobinYvonXMLReader:
         )
         self._set_metadata(
             self.metadata["Acquisition_instrument"]["Laser"],
-            "wavelength (nm)",
+            "wavelength",
             self.original_metadata["experimental setup"],
             "Laser (nm)",
         )
@@ -520,7 +520,7 @@ class JobinYvonXMLReader:
         )
         self._set_metadata(
             self.metadata["Acquisition_instrument"]["Spectrometer"],
-            "central_wavelength (nm)",
+            "central_wavelength",
             self.original_metadata["experimental setup"],
             "Spectro (nm)",
         )
@@ -556,19 +556,25 @@ class JobinYvonXMLReader:
         )
         self._set_metadata(
             self.metadata["Acquisition_instrument"]["Detector"],
+            "delay_time",
+            self.original_metadata["experimental setup"],
+            "Delay time (s)",
+        )
+        self._set_metadata(
+            self.metadata["Acquisition_instrument"]["Detector"],
             "binning",
             self.original_metadata["experimental setup"],
             "Binning",
         )
         self._set_metadata(
             self.metadata["Acquisition_instrument"]["Detector"],
-            "temperature (°C)",
+            "temperature",
             self.original_metadata["experimental setup"],
             "Detector temperature (°C)",
         )
         self._set_metadata(
             self.metadata["Acquisition_instrument"]["Detector"],
-            "exposure_per_frame (s)",
+            "exposure_per_frame",
             self.original_metadata["experimental setup"],
             "Acq. time (s)",
         )
@@ -580,51 +586,75 @@ class JobinYvonXMLReader:
         )
         self._set_metadata(
             self.metadata["Acquisition_instrument"]["Detector"]["processing"],
-            "Autofocus",
+            "autofocus",
             self.original_metadata["experimental setup"],
             "Autofocus",
         )
         self._set_metadata(
             self.metadata["Acquisition_instrument"]["Detector"]["processing"],
-            "SWIFT",
+            "swift",
             self.original_metadata["experimental setup"],
             "SWIFT",
         )
         self._set_metadata(
             self.metadata["Acquisition_instrument"]["Detector"]["processing"],
-            "AutoExposure",
+            "auto_exposure",
             self.original_metadata["experimental setup"],
             "AutoExposure",
         )
         self._set_metadata(
             self.metadata["Acquisition_instrument"]["Detector"]["processing"],
-            "Spike filter",
+            "spike_filter",
             self.original_metadata["experimental setup"],
             "Spike filter",
         )
         self._set_metadata(
             self.metadata["Acquisition_instrument"]["Detector"]["processing"],
-            "DeNoise",
+            "de_noise",
             self.original_metadata["experimental setup"],
             "DeNoise",
         )
         self._set_metadata(
             self.metadata["Acquisition_instrument"]["Detector"]["processing"],
-            "ICS correction",
+            "ics_correction",
             self.original_metadata["experimental setup"],
             "ICS correction",
         )
         self._set_metadata(
             self.metadata["Acquisition_instrument"]["Detector"]["processing"],
-            "Dark correction",
+            "dark_correction",
             self.original_metadata["experimental setup"],
             "Dark correction",
         )
         self._set_metadata(
             self.metadata["Acquisition_instrument"]["Detector"]["processing"],
-            "Inst. Process",
+            "inst_process",
             self.original_metadata["experimental setup"],
             "Inst. Process",
+        )
+        self._set_metadata(
+            self.metadata["Acquisition_instrument"]["Laser"]["Polarizer"],
+            "polarizer_type",
+            self.original_metadata["experimental setup"],
+            "Laser. Pol.",
+        )
+        self._set_metadata(
+            self.metadata["Acquisition_instrument"]["Spectrometer"]["Polarizer"],
+            "polarizer_type",
+            self.original_metadata["experimental setup"],
+            "Raman. Pol.",
+        )
+        self._set_metadata(
+            self.metadata["Acquisition_instrument"]["Laser"]["Polarizer"],
+            "angle",
+            self.original_metadata["experimental setup"],
+            "Laser Pol. (°)",
+        )
+        self._set_metadata(
+            self.metadata["Acquisition_instrument"]["Spectrometer"]["Polarizer"],
+            "angle",
+            self.original_metadata["experimental setup"],
+            "Raman Pol. (°)",
         )
 
         ## calculate and set integration time
@@ -637,7 +667,7 @@ class JobinYvonXMLReader:
             pass
         else:
             self.metadata["Acquisition_instrument"]["Detector"][
-                "integration_time (s)"
+                "integration_time"
             ] = integration_time
 
         ## convert filter range from percentage (0-100) to (0-1)
@@ -645,6 +675,19 @@ class JobinYvonXMLReader:
             self.metadata["Acquisition_instrument"]["Laser"]["Filter"][
                 "optical_density"
             ] /= 100
+        except KeyError:
+            pass
+
+        ## convert entrance_hole_width to mm
+        try:
+            self.metadata["Acquisition_instrument"]["Spectrometer"][
+                "entrance_slit_width"
+            ] /= 100
+            self.metadata["Acquisition_instrument"]["Spectrometer"][
+                "pinhole"
+            ] = self.metadata["Acquisition_instrument"]["Spectrometer"][
+                "entrance_slit_width"
+            ]
         except KeyError:
             pass
 

@@ -232,57 +232,60 @@ class TestSpec:
             metadata["Acquisition_instrument"]["Detector"]["binning"], 30
         )
         np.testing.assert_allclose(
-            metadata["Acquisition_instrument"]["Detector"]["exposure_per_frame (s)"], 1
+            metadata["Acquisition_instrument"]["Detector"]["exposure_per_frame"], 1
         )
         np.testing.assert_allclose(
             metadata["Acquisition_instrument"]["Detector"]["frames"], 2
         )
         np.testing.assert_allclose(
-            metadata["Acquisition_instrument"]["Detector"]["integration_time (s)"], 2
+            metadata["Acquisition_instrument"]["Detector"]["integration_time"], 2
         )
         np.testing.assert_allclose(
-            metadata["Acquisition_instrument"]["Detector"]["temperature (°C)"], -118.94
+            metadata["Acquisition_instrument"]["Detector"]["temperature"], -118.94
+        )
+        np.testing.assert_allclose(
+            metadata["Acquisition_instrument"]["Detector"]["delay_time"], 0
         )
         assert metadata["Acquisition_instrument"]["Detector"]["model"] == "Symphony VIS"
         assert (
-            metadata["Acquisition_instrument"]["Detector"]["processing"]["AutoExposure"]
-            == "Off"
-        )
-        assert (
-            metadata["Acquisition_instrument"]["Detector"]["processing"]["Autofocus"]
-            == "Off"
-        )
-        assert (
             metadata["Acquisition_instrument"]["Detector"]["processing"][
-                "Dark correction"
+                "auto_exposure"
             ]
             == "Off"
         )
         assert (
-            metadata["Acquisition_instrument"]["Detector"]["processing"]["DeNoise"]
+            metadata["Acquisition_instrument"]["Detector"]["processing"]["autofocus"]
             == "Off"
         )
         assert (
             metadata["Acquisition_instrument"]["Detector"]["processing"][
-                "ICS correction"
+                "dark_correction"
             ]
+            == "Off"
+        )
+        assert (
+            metadata["Acquisition_instrument"]["Detector"]["processing"]["de_noise"]
             == "Off"
         )
         assert (
             metadata["Acquisition_instrument"]["Detector"]["processing"][
-                "Inst. Process"
+                "ics_correction"
             ]
             == "Off"
         )
         assert (
-            metadata["Acquisition_instrument"]["Detector"]["processing"]["Spike filter"]
+            metadata["Acquisition_instrument"]["Detector"]["processing"]["inst_process"]
+            == "Off"
+        )
+        assert (
+            metadata["Acquisition_instrument"]["Detector"]["processing"]["spike_filter"]
             == "Multiple accum."
         )
         np.testing.assert_allclose(
             metadata["Acquisition_instrument"]["Laser"]["objective_magnification"], 100
         )
         np.testing.assert_allclose(
-            metadata["Acquisition_instrument"]["Laser"]["wavelength (nm)"], 632.817
+            metadata["Acquisition_instrument"]["Laser"]["wavelength"], 632.817
         )
         np.testing.assert_allclose(
             metadata["Acquisition_instrument"]["Laser"]["Filter"]["optical_density"],
@@ -295,14 +298,24 @@ class TestSpec:
             1800,
         )
         np.testing.assert_allclose(
-            metadata["Acquisition_instrument"]["Spectrometer"][
-                "central_wavelength (nm)"
-            ],
+            metadata["Acquisition_instrument"]["Spectrometer"]["central_wavelength"],
             530.0006245,
         )
         np.testing.assert_allclose(
             metadata["Acquisition_instrument"]["Spectrometer"]["entrance_slit_width"],
-            100.02125,
+            1.0002125,
+        )
+        np.testing.assert_allclose(
+            metadata["Acquisition_instrument"]["Spectrometer"]["pinhole"],
+            1.0002125,
+        )
+        np.testing.assert_allclose(
+            metadata["Acquisition_instrument"]["Spectrometer"]["Polarizer"]["angle"],
+            0,
+        )
+        np.testing.assert_allclose(
+            metadata["Acquisition_instrument"]["Laser"]["Polarizer"]["angle"],
+            0,
         )
         assert (
             metadata["Acquisition_instrument"]["Spectrometer"]["model"]
@@ -311,6 +324,16 @@ class TestSpec:
         assert (
             metadata["Acquisition_instrument"]["Spectrometer"]["spectral_range"]
             == "Visible"
+        )
+        assert (
+            metadata["Acquisition_instrument"]["Spectrometer"]["Polarizer"][
+                "polarizer_type"
+            ]
+            == "No"
+        )
+        assert (
+            metadata["Acquisition_instrument"]["Laser"]["Polarizer"]["polarizer_type"]
+            == "L/2 vis L"
         )
 
         ## remove FileIO for comparison (timestamp varies)

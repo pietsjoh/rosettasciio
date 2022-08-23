@@ -26,19 +26,36 @@ hs = pytest.importorskip("hyperspy.api", reason="hyperspy not installed")
 
 testfile_dir = (Path(__file__).parent / "jobin_yvon_data").resolve()
 
-testfile_spec_path = (testfile_dir / "jobinyvon_test_spec.xml").resolve()
+testfile_spec_wavelength_path = (testfile_dir / "jobinyvon_test_spec.xml").resolve()
+testfile_spec_wavenumber_path = (testfile_dir / "jobinyvon_test_spec_3s_cm-1.xml").resolve()
+testfile_spec_abs_wavenumber_path = (testfile_dir / "jobinyvon_test_spec_3s_abs-cm-1.xml").resolve()
+testfile_spec_energy_path = (testfile_dir / "jobinyvon_test_spec_3s_eV.xml").resolve()
 testfile_linescan_path = (testfile_dir / "jobinyvon_test_linescan.xml").resolve()
 testfile_map_path = (testfile_dir / "jobinyvon_test_map.xml").resolve()
 
+
+def test_signal_units():
+    s_wn = hs.load(testfile_spec_wavenumber_path, reader="Jobin Yvon", use_uniform_wavelength_axis=True)
+    s_abs_wn = hs.load(testfile_spec_abs_wavenumber_path, reader="Jobin Yvon", use_uniform_wavelength_axis=True)
+    s_ev = hs.load(testfile_spec_energy_path, reader="Jobin Yvon", use_uniform_wavelength_axis=True)
+
+    assert s_wn.axes_manager.as_dictionary()["axis-0"]["units"] == "1/cm"
+    assert s_abs_wn.axes_manager.as_dictionary()["axis-0"]["units"] == "1/cm"
+    assert s_ev.axes_manager.as_dictionary()["axis-0"]["units"] == "eV"
+
+    del s_wn
+    del s_abs_wn
+    del s_ev
+    gc.collect()
 
 class TestSpec:
     @classmethod
     def setup_class(cls):
         cls.s = hs.load(
-            testfile_spec_path, reader="Jobin Yvon", use_uniform_wavelength_axis=True
+            testfile_spec_wavelength_path, reader="Jobin Yvon", use_uniform_wavelength_axis=True
         )
         cls.s_non_uniform = hs.load(
-            testfile_spec_path, reader="Jobin Yvon", use_uniform_wavelength_axis=False
+            testfile_spec_wavelength_path, reader="Jobin Yvon", use_uniform_wavelength_axis=False
         )
 
     @classmethod
@@ -225,7 +242,7 @@ class TestSpec:
             metadata["General"]["FileIO"]["0"]["io_plugin"] == "rsciio.jobin_yvon.api"
         )
         assert metadata["General"]["date"] == "27.06.2022"
-        assert metadata["General"]["original_filename"] == str(testfile_spec_path.name)
+        assert metadata["General"]["original_filename"] == str(testfile_spec_wavelength_path.name)
         assert metadata["General"]["time"] == "16:26:24"
         assert metadata["Signal"]["quantity"] == "Intensity (Counts/s)"
         np.testing.assert_allclose(

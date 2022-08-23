@@ -349,7 +349,15 @@ class JobinYvonXMLReader:
         if wavelength_dict["name"] == "Spectr":
             if wavelength_dict["units"][:2] == "1/":
                 wavelength_dict["name"] = "Wavenumber"
+                wavelength_dict["units"] = wavelength_dict["units"][:4]
+            elif wavelength_dict["units"] == "nm":
+                wavelength_dict["name"] = "Wavelength"
+            elif wavelength_dict["units"] == "eV":
+                wavelength_dict["name"] = "Energy"
             else:
+                _logger.warning(
+                    "Cannot extract type of signal axis, using wavelength as name. Check on axis units (nm, eV, 1/cm can be read)"
+                )
                 wavelength_dict["name"] = "Wavelength"
         wavelength_dict["navigate"] = False
         if not self.use_uniform_wavelength_axis:

@@ -314,10 +314,12 @@ class JobinYvonXMLReader:
         for child in xml_element:
             id = self.get_id(child)
             if id == '0x7D6CD4DB':
-                wavelength_array = np.fromstring(child.text.strip(), sep=" ")[::-1]
+                wavelength_array = np.fromstring(child.text.strip(), sep=" ")
                 wavelength_dict["scale"] = self.get_scale(wavelength_array, "wavelength")
-                wavelength_dict["offset"] = np.amin(wavelength_array)
+                wavelength_dict["offset"] = wavelength_array[0]
                 wavelength_dict["size"] = wavelength_array.size
+                if wavelength_array[0] > wavelength_array[1]:
+                    wavelength_dict["scale"] *= -1
             if id == '0x6D707974':
                 wavelength_dict["name"] = child.text
             if id == '0x7C696E75':
@@ -379,13 +381,13 @@ class JobinYvonXMLReader:
         num_rows = len(sig_raw)
         if num_rows == 1:
             ## Spectrum
-            self.sig_array = np.fromstring(sig_raw[0].text.strip(), sep=" ")[::-1]
+            self.sig_array = np.fromstring(sig_raw[0].text.strip(), sep=" ")
         else:
             ## linescan or map
             num_cols = self.get_size(sig_raw[0])
             self.sig_array = np.empty((num_rows, num_cols))
             for i, row in enumerate(sig_raw):
-                row_array = np.fromstring(row.text.strip(), sep=" ")[::-1]
+                row_array = np.fromstring(row.text.strip(), sep=" ")
                 self.sig_array[i, :] = row_array
             ## reshape the array (lexicographic -> cartesian)
             ## reshape depends on available axes

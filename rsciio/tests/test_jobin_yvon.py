@@ -1013,9 +1013,3 @@ class TestMap:
         )
         assert map_axes_non_uniform == non_uniform_axis_manager
         assert map_axes == self.s.axes_manager.as_dictionary()
-
-
-s = hs.load(testfile_spec_path, reader="Jobin Yvon")
-
-print(s.axes_manager.as_dictionary())
-print(s.data)

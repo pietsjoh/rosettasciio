@@ -49,7 +49,7 @@ class TestSpec:
         spec_data = [1496, 1242, 1094, 986, 948, 900, 858, 855, 840, 822, 824, 820, 810, 809, 791,
 		    781, 771, 782, 795, 790, 777, 771, 769, 767, 756, 755, 759, 740, 743, 763,
 		    759, 727, 764, 760]
-        assert (spec_data == self.s.data.tolist())
+        assert (spec_data[::-1] == self.s.data.tolist())
         np.testing.assert_allclose(self.s.data, self.s_non_uniform.data)
 
     def test_axes(self):
@@ -77,7 +77,7 @@ class TestSpec:
 
         non_uniform_axis_manager = deepcopy(self.s_non_uniform.axes_manager.as_dictionary())
 
-        np.testing.assert_allclose(non_uniform_axis_values, non_uniform_axis_manager["axis-0"].pop("axis"))
+        np.testing.assert_allclose(non_uniform_axis_values[::-1], non_uniform_axis_manager["axis-0"].pop("axis"))
         assert (spec_axes == self.s.axes_manager.as_dictionary())
         assert (spec_axes_non_uniform == non_uniform_axis_manager)
 
@@ -192,9 +192,9 @@ class TestLinescan:
         linescan_row2 = [1546, 1292, 1124, 1020, 950, 901, 890, 865, 865, 847, 837, 824, 827, 808, 818,
 		809, 810, 814, 798, 784, 790, 785, 771, 790, 786, 786, 773, 771, 772, 768,
 		782, 762, 757, 781]
-        assert (linescan_row0 == self.s.data.tolist()[0])
-        assert (linescan_row1 == self.s.data.tolist()[1])
-        assert (linescan_row2 == self.s.data.tolist()[2])
+        assert (linescan_row0[::-1] == self.s.data.tolist()[0])
+        assert (linescan_row1[::-1] == self.s.data.tolist()[1])
+        assert (linescan_row2[::-1] == self.s.data.tolist()[2])
         np.testing.assert_allclose(self.s.data, self.s_non_uniform.data)
 
     def test_axes(self):
@@ -245,7 +245,7 @@ class TestLinescan:
 
         non_uniform_axis_manager = deepcopy(self.s_non_uniform.axes_manager.as_dictionary())
 
-        np.testing.assert_allclose(non_uniform_axis_values, non_uniform_axis_manager["axis-1"].pop("axis"))
+        np.testing.assert_allclose(non_uniform_axis_values[::-1], non_uniform_axis_manager["axis-1"].pop("axis"))
         assert (linescan_axes_non_uniform == non_uniform_axis_manager)
         assert (linescan_axes == self.s.axes_manager.as_dictionary())
 
@@ -290,15 +290,15 @@ class TestMap:
         map_row8 = [1629, 1362, 1171, 1069, 1008, 947, 931, 896, 877, 872, 866, 867, 873, 844, 853,
 		847, 847, 822, 837, 817, 823, 818, 809, 827, 823, 792, 817, 818, 801, 801,
 		794, 787, 783, 796]
-        assert (map_row0 == self.s.data.tolist()[0][0])
-        assert (map_row1 == self.s.data.tolist()[0][1])
-        assert (map_row2 == self.s.data.tolist()[0][2])
-        assert (map_row3 == self.s.data.tolist()[1][0])
-        assert (map_row4 == self.s.data.tolist()[1][1])
-        assert (map_row5 == self.s.data.tolist()[1][2])
-        assert (map_row6 == self.s.data.tolist()[2][0])
-        assert (map_row7 == self.s.data.tolist()[2][1])
-        assert (map_row8 == self.s.data.tolist()[2][2])
+        assert (map_row0[::-1] == self.s.data.tolist()[0][0])
+        assert (map_row1[::-1] == self.s.data.tolist()[0][1])
+        assert (map_row2[::-1] == self.s.data.tolist()[0][2])
+        assert (map_row3[::-1] == self.s.data.tolist()[1][0])
+        assert (map_row4[::-1] == self.s.data.tolist()[1][1])
+        assert (map_row5[::-1] == self.s.data.tolist()[1][2])
+        assert (map_row6[::-1] == self.s.data.tolist()[2][0])
+        assert (map_row7[::-1] == self.s.data.tolist()[2][1])
+        assert (map_row8[::-1] == self.s.data.tolist()[2][2])
         np.testing.assert_allclose(self.s.data, self.s_non_uniform.data)
 
     def test_axes(self):
@@ -369,6 +369,6 @@ class TestMap:
 
         non_uniform_axis_manager = deepcopy(self.s_non_uniform.axes_manager.as_dictionary())
 
-        np.testing.assert_allclose(non_uniform_axis_values, non_uniform_axis_manager["axis-2"].pop("axis"))
+        np.testing.assert_allclose(non_uniform_axis_values[::-1], non_uniform_axis_manager["axis-2"].pop("axis"))
         assert (map_axes_non_uniform == non_uniform_axis_manager)
         assert (map_axes == self.s.axes_manager.as_dictionary())

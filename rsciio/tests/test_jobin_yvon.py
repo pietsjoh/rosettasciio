@@ -22,7 +22,7 @@ import pytest
 from pathlib import Path
 from copy import deepcopy
 
-from hyperspy.io import load
+hs = pytest.importorskip("hyperspy.api", reason="hyperspy not installed")
 
 testfile_dir = (Path(__file__).parent / "jobin_yvon_data").resolve()
 
@@ -36,8 +36,8 @@ class TestSpec:
 
     @classmethod
     def setup_class(cls):
-        cls.s = load(testfile_spec_path, reader="Jobin Yvon", use_uniform_wavelength_axis=True)
-        cls.s_non_uniform = load(testfile_spec_path, reader="Jobin Yvon", use_uniform_wavelength_axis=False)
+        cls.s = hs.load(testfile_spec_path, reader="Jobin Yvon", use_uniform_wavelength_axis=True)
+        cls.s_non_uniform = hs.load(testfile_spec_path, reader="Jobin Yvon", use_uniform_wavelength_axis=False)
 
     @classmethod
     def teardown_class(cls):
@@ -173,8 +173,8 @@ class TestLinescan:
 
     @classmethod
     def setup_class(cls):
-        cls.s = load(testfile_linescan_path, reader="Jobin Yvon", use_uniform_wavelength_axis=True)
-        cls.s_non_uniform = load(testfile_linescan_path, reader="Jobin Yvon", use_uniform_wavelength_axis=False)
+        cls.s = hs.load(testfile_linescan_path, reader="Jobin Yvon", use_uniform_wavelength_axis=True)
+        cls.s_non_uniform = hs.load(testfile_linescan_path, reader="Jobin Yvon", use_uniform_wavelength_axis=False)
 
     @classmethod
     def teardown_class(cls):
@@ -253,8 +253,8 @@ class TestMap:
 
     @classmethod
     def setup_class(cls):
-        cls.s = load(testfile_map_path, reader="Jobin Yvon", use_uniform_wavelength_axis=True)
-        cls.s_non_uniform = load(testfile_map_path, reader="Jobin Yvon", use_uniform_wavelength_axis=False)
+        cls.s = hs.load(testfile_map_path, reader="Jobin Yvon", use_uniform_wavelength_axis=True)
+        cls.s_non_uniform = hs.load(testfile_map_path, reader="Jobin Yvon", use_uniform_wavelength_axis=False)
 
     @classmethod
     def teardown_class(cls):

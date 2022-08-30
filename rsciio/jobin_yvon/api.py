@@ -257,9 +257,7 @@ class JobinYvonXMLReader:
             abs_diff_compare = np.abs(abs_diff_begin - abs_diff_end)
             min_array = np.amin(array)
             if not np.isclose(min_array, 0):
-                rel_diff_begin = abs_diff_begin / min_array
-                rel_diff_end = abs_diff_end / min_array
-                rel_diff_compare = np.abs(rel_diff_begin - rel_diff_end)
+                rel_diff_compare = abs_diff_compare / min_array
                 if rel_diff_compare > 0.01 and self.use_uniform_wavelength_axis:
                     _logger.warning(
                         f"The relative variation of the {name}-axis-scale ({rel_diff_compare}) is greater than 1%. Using a non-uniform-axis is recommended."

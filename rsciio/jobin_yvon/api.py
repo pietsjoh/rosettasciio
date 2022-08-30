@@ -36,6 +36,7 @@ class JobinYvonXMLReader:
         self.use_uniform_wavelength_axis = use_uniform_wavelength_axis
         self.file_path = file_path
         self.metadata = dict()
+        self.reverse_wavelength = False
 
     ## each element of the xml-tree has the attributes attrib, tag, text
     ## jobin-yvon-xml only has the tags LSX_DATA,
@@ -294,7 +295,7 @@ class JobinYvonXMLReader:
                     has_nav = False
                 else:
                     nav_dict["scale"] = self.get_scale(nav_array, tag)
-                    nav_dict["offset"] = np.amin(nav_array)
+                    nav_dict["offset"] = nav_array[0]
                     nav_dict["size"] = nav_size
                     nav_dict["navigate"] = True
         if has_nav:
@@ -336,13 +337,17 @@ class JobinYvonXMLReader:
             id = self.get_id(child)
             if id == "0x7D6CD4DB":
                 wavelength_array = np.fromstring(child.text.strip(), sep=" ")
-                wavelength_dict["scale"] = self.get_scale(
-                    wavelength_array, "wavelength"
-                )
-                wavelength_dict["offset"] = wavelength_array[0]
-                wavelength_dict["size"] = wavelength_array.size
                 if wavelength_array[0] > wavelength_array[1]:
-                    wavelength_dict["scale"] *= -1
+                    wavelength_array = wavelength_array[::-1]
+                    self.reverse_wavelength = True
+                if self.use_uniform_wavelength_axis:
+                    wavelength_dict["scale"] = self.get_scale(
+                        wavelength_array, "wavelength"
+                    )
+                    wavelength_dict["offset"] = wavelength_array[0]
+                    wavelength_dict["size"] = wavelength_array.size
+                else:
+                    wavelength_dict["axis"] = wavelength_array
             if id == "0x6D707974":
                 wavelength_dict["name"] = child.text
             if id == "0x7C696E75":
@@ -361,11 +366,6 @@ class JobinYvonXMLReader:
                 )
                 wavelength_dict["name"] = "Wavelength"
         wavelength_dict["navigate"] = False
-        if not self.use_uniform_wavelength_axis:
-            del wavelength_dict["offset"]
-            del wavelength_dict["scale"]
-            del wavelength_dict["size"]
-            wavelength_dict["axis"] = wavelength_array
         self.axes["wavelength_dict"] = wavelength_dict
 
     def _sort_nav_axes(self):
@@ -410,12 +410,16 @@ class JobinYvonXMLReader:
         if num_rows == 1:
             ## Spectrum
             self.sig_array = np.fromstring(sig_raw[0].text.strip(), sep=" ")
+            if self.reverse_wavelength:
+                self.sig_array = self.sig_array[::-1]
         else:
             ## linescan or map
             num_cols = self.get_size(sig_raw[0])
             self.sig_array = np.empty((num_rows, num_cols))
             for i, row in enumerate(sig_raw):
                 row_array = np.fromstring(row.text.strip(), sep=" ")
+                if self.reverse_wavelength:
+                    row_array = row_array[::-1]
                 self.sig_array[i, :] = row_array
             ## reshape the array (lexicographic -> cartesian)
             ## reshape depends on available axes

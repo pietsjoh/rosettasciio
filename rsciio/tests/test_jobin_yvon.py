@@ -135,7 +135,7 @@ class TestSpec:
             764,
             760,
         ]
-        assert spec_data == self.s.data.tolist()
+        assert spec_data[::-1] == self.s.data.tolist()
         np.testing.assert_allclose(self.s.data, self.s_non_uniform.data)
 
     def test_axes(self):
@@ -147,8 +147,8 @@ class TestSpec:
                 "navigate": False,
                 "is_binned": False,
                 "size": 34,
-                "scale": -0.44809090909091015,
-                "offset": 537.361,
+                "scale": 0.44809090909091015,
+                "offset": 522.574,
             }
         }
 
@@ -206,7 +206,8 @@ class TestSpec:
         )
 
         np.testing.assert_allclose(
-            non_uniform_axis_values, non_uniform_axis_manager["axis-0"].pop("axis")
+            non_uniform_axis_values[::-1],
+            non_uniform_axis_manager["axis-0"].pop("axis"),
         )
         assert spec_axes == self.s.axes_manager.as_dictionary()
         assert spec_axes_non_uniform == non_uniform_axis_manager
@@ -526,9 +527,9 @@ class TestLinescan:
             757,
             781,
         ]
-        assert linescan_row0 == self.s.data.tolist()[0]
-        assert linescan_row1 == self.s.data.tolist()[1]
-        assert linescan_row2 == self.s.data.tolist()[2]
+        assert linescan_row0[::-1] == self.s.data.tolist()[0]
+        assert linescan_row1[::-1] == self.s.data.tolist()[1]
+        assert linescan_row2[::-1] == self.s.data.tolist()[2]
         np.testing.assert_allclose(self.s.data, self.s_non_uniform.data)
 
     def test_axes(self):
@@ -550,8 +551,8 @@ class TestLinescan:
                 "navigate": False,
                 "is_binned": False,
                 "size": 34,
-                "scale": -0.44809090909091015,
-                "offset": 537.361,
+                "scale": 0.44809090909091015,
+                "offset": 522.574,
             },
         }
 
@@ -619,7 +620,8 @@ class TestLinescan:
         )
 
         np.testing.assert_allclose(
-            non_uniform_axis_values, non_uniform_axis_manager["axis-1"].pop("axis")
+            non_uniform_axis_values[::-1],
+            non_uniform_axis_manager["axis-1"].pop("axis"),
         )
         assert linescan_axes_non_uniform == non_uniform_axis_manager
         assert linescan_axes == self.s.axes_manager.as_dictionary()

@@ -36,6 +36,7 @@ testfile_spec_abs_wavenumber_path = (
 testfile_spec_energy_path = (testfile_dir / "jobinyvon_test_spec_3s_eV.xml").resolve()
 testfile_linescan_path = (testfile_dir / "jobinyvon_test_linescan.xml").resolve()
 testfile_map_path = (testfile_dir / "jobinyvon_test_map_x3-y2.xml").resolve()
+testfile_glue_path = (testfile_dir / "jobinyvon_test_spec_range.xml").resolve()
 
 
 class TestSpec:
@@ -906,51 +907,23 @@ class TestMap:
 
         assert map_axes == self.s.axes_manager.as_dictionary()
 
-        non_uniform_axis_values = np.array(
-            [
-                537.361,
-                536.918,
-                536.474,
-                536.031,
-                535.586,
-                535.142,
-                534.697,
-                534.252,
-                533.807,
-                533.361,
-                532.915,
-                532.468,
-                532.022,
-                531.575,
-                531.128,
-                530.68,
-                530.232,
-                529.784,
-                529.336,
-                528.887,
-                528.438,
-                527.988,
-                527.539,
-                527.089,
-                526.639,
-                526.188,
-                525.737,
-                525.286,
-                524.835,
-                524.383,
-                523.931,
-                523.479,
-                523.027,
-                522.574,
-            ]
+
+class TestGlue:
+    @classmethod
+    def setup_class(cls):
+        cls.s = hs.load(
+            testfile_glue_path, reader="Jobin Yvon", use_uniform_wavelength_axis=True
+        )
+        cls.s_non_uniform = hs.load(
+            testfile_glue_path, reader="Jobin Yvon", use_uniform_wavelength_axis=False
         )
 
-        non_uniform_axis_manager = deepcopy(
-            self.s_non_uniform.axes_manager.as_dictionary()
-        )
+    @classmethod
+    def teardown_class(cls):
+        del cls.s
+        del cls.s_non_uniform
+        gc.collect()
 
-        np.testing.assert_allclose(
-            non_uniform_axis_values, non_uniform_axis_manager["axis-2"].pop("axis")
-        )
-        assert map_axes_non_uniform == non_uniform_axis_manager
-        assert map_axes == self.s.axes_manager.as_dictionary()
+    def test_data(self):
+        assert np.isclose(self.s.isig[0].data, 238)
+        assert np.isclose(self.s.isig[-1].data, 254.265)

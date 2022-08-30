@@ -2,7 +2,7 @@
 <LSX_Data>
 	<LSX_Tree Format="9" ID="0x69746164" Size="12">
 		<LSX Format="7" ID="0x6D707974">SpIm</LSX>
-		<LSX Format="8" ID="0x6C7469D9">jobinyvon_test_map_old</LSX>
+		<LSX Format="8" ID="0x6C7469D9">jobinyvon_test_map_x3-y2</LSX>
 		<LSX Format="4" ID="0x6DD6C7D0">65728</LSX>
 		<LSX Format="9" ID="0x7A74D9D6" Size="1">
 			<LSX Format="9" ID="0x7B697861" Size="4">
@@ -11,59 +11,59 @@
 					<LSX Format="7" ID="0x7C696E75">Cnt/sec</LSX>
 					<LSX Format="9" ID="0x6D6174E3" Size="3">
 						<LSX Format="6" ID="0x6E75E2C6" Size="68">
-						1555 1287 1143 1020 959 911 892 866 858 847 836 841 820 829 824 
-						820 800 811 792 800 798 795 786 798 787 786 789 771 780 780 
-						775 768 768 775 1655 1380 1194 1090 1019 982 948 932 911 900 883 
-						878 873 866 853 875 860 849 858 829 840 856 861 844 838 818 
-						817 818 808 803 809 814 801 798 
+						254.5 202 176 146 143 138 126 128 145.5 130 124.5 114 122.5 119 120 
+						125 122.5 124 118 126 122 120 115.5 114 110 114.5 108.5 121 114 115 
+						115.5 116.5 108.5 108.5 295.5 234 206.5 184 168 171.5 158 161.5 174.5 161 157.5 
+						152.5 157 159 160 156.5 150.5 155 160.5 153.5 155.5 158.5 148.5 152 156.5 153.5 
+						157 150 149.5 146.5 146 142.5 141.5 144 
 						</LSX>
 						<LSX Format="9" ID="0x6E61656D" Size="2">
-							<LSX Format="5" ID="0x0">768</LSX>
-							<LSX Format="5" ID="0x1">1573.57213884927</LSX>
+							<LSX Format="5" ID="0x0">108.5</LSX>
+							<LSX Format="5" ID="0x1">266.584462996668</LSX>
 						</LSX>
 						<LSX Format="9" ID="0x696DDCE0" Size="2">
-							<LSX Format="5" ID="0x0">768</LSX>
-							<LSX Format="5" ID="0x1">1655</LSX>
+							<LSX Format="5" ID="0x0">108.5</LSX>
+							<LSX Format="5" ID="0x1">295.5</LSX>
 						</LSX>
 					</LSX>
 				</LSX>
 				<LSX Format="9" ID="0x1" Size="4">
 					<LSX Format="6" ID="0x7D6CD4DB" Size="34">
-					537.361 536.918 536.474 536.031 535.586 535.142 534.697 534.252 533.807 533.361 532.915 532.468 532.022 531.575 531.128 
-					530.68 530.232 529.784 529.336 528.887 528.438 527.988 527.539 527.089 526.639 526.188 525.737 525.286 524.835 524.383 
-					523.931 523.479 523.027 522.574 
+					771.797 770.264 768.73 767.196 765.661 764.126 762.59 761.053 759.516 757.978 756.44 754.902 753.363 751.823 750.283 
+					748.742 747.2 745.659 744.117 742.574 741.03 739.487 737.942 736.398 734.852 733.307 731.76 730.214 728.667 727.119 
+					725.571 724.023 722.474 720.924 
 					</LSX>
 					<LSX Format="7" ID="0x6D707974">Spectr</LSX>
 					<LSX Format="7" ID="0x7C696E75">nm</LSX>
 					<LSX Format="9" ID="0x6D6174E3" Size="1">
 						<LSX Format="9" ID="0x696DDCE0" Size="2">
-							<LSX Format="5" ID="0x0">522.57373046875</LSX>
-							<LSX Format="5" ID="0x1">537.361206054688</LSX>
+							<LSX Format="5" ID="0x0">720.924255371094</LSX>
+							<LSX Format="5" ID="0x1">771.796752929688</LSX>
 						</LSX>
 					</LSX>
 				</LSX>
 				<LSX Format="9" ID="0x2" Size="4">
 					<LSX Format="6" ID="0x7D6CD4DB" Size="3">
-					0 0.5 1 
+					-2 0 2 
 					</LSX>
 					<LSX Format="7" ID="0x6D707974">X</LSX>
 					<LSX Format="7" ID="0x7C696E75">µm</LSX>
 					<LSX Format="9" ID="0x6D6174E3" Size="1">
 						<LSX Format="9" ID="0x696DDCE0" Size="2">
-							<LSX Format="5" ID="0x0">0</LSX>
-							<LSX Format="5" ID="0x1">1</LSX>
+							<LSX Format="5" ID="0x0">-2</LSX>
+							<LSX Format="5" ID="0x1">2</LSX>
 						</LSX>
 					</LSX>
 				</LSX>
 				<LSX Format="9" ID="0x3" Size="4">
-					<LSX Format="6" ID="0x7D6CD4DB" Size="3">
-					0 0.5 1 
+					<LSX Format="6" ID="0x7D6CD4DB" Size="2">
+					-1 1 
 					</LSX>
 					<LSX Format="7" ID="0x6D707974">Y</LSX>
 					<LSX Format="7" ID="0x7C696E75">µm</LSX>
 					<LSX Format="9" ID="0x6D6174E3" Size="1">
 						<LSX Format="9" ID="0x696DDCE0" Size="2">
-							<LSX Format="5" ID="0x0">0</LSX>
+							<LSX Format="5" ID="0x0">-1</LSX>
 							<LSX Format="5" ID="0x1">1</LSX>
 						</LSX>
 					</LSX>
@@ -75,33 +75,33 @@
 			<LSX Format="9" ID="0x8716361" Size="2">
 				<LSX Format="9" ID="0x8000079" Size="3">
 					<LSX Format="4" ID="0x6D646F6D">1</LSX>
-					<LSX Format="5" ID="0x78657473">0.5</LSX>
-					<LSX Format="4" ID="0x6D7A6973">3</LSX>
+					<LSX Format="5" ID="0x78657473">2</LSX>
+					<LSX Format="4" ID="0x6D7A6973">2</LSX>
 				</LSX>
 				<LSX Format="9" ID="0x8000078" Size="3">
 					<LSX Format="4" ID="0x6D646F6D">1</LSX>
-					<LSX Format="5" ID="0x78657473">0.5</LSX>
+					<LSX Format="5" ID="0x78657473">2</LSX>
 					<LSX Format="4" ID="0x6D7A6973">3</LSX>
 				</LSX>
 			</LSX>
 			<LSX Format="9" ID="0x8000078" Size="2">
-				<LSX Format="5" ID="0x0">0</LSX>
-				<LSX Format="5" ID="0x1">1</LSX>
+				<LSX Format="5" ID="0x0">-2</LSX>
+				<LSX Format="5" ID="0x1">2</LSX>
 			</LSX>
 			<LSX Format="9" ID="0x8000079" Size="2">
-				<LSX Format="5" ID="0x0">0</LSX>
+				<LSX Format="5" ID="0x0">-1</LSX>
 				<LSX Format="5" ID="0x1">1</LSX>
 			</LSX>
 		</LSX>
 		<LSX Format="9" ID="0x6C62D4D9" Size="3">
-			<LSX Format="9" ID="0x8716361" Size="32">
+			<LSX Format="9" ID="0x8716361" Size="30">
 				<LSX Format="9" ID="0x6F707865" Size="3">
-					<LSX Format="5" ID="0x7D6C61DB">1</LSX>
+					<LSX Format="5" ID="0x7D6C61DB">2</LSX>
 					<LSX Format="7" ID="0x6D6D616E">Acq. time (s)</LSX>
 					<LSX Format="7" ID="0x7C696E75">s</LSX>
 				</LSX>
 				<LSX Format="9" ID="0x7D6363CE" Size="2">
-					<LSX Format="4" ID="0x7D6C61DB">2</LSX>
+					<LSX Format="4" ID="0x7D6C61DB">1</LSX>
 					<LSX Format="7" ID="0x6D6D616E">Accumulations</LSX>
 				</LSX>
 				<LSX Format="9" ID="0x6F6E61D7" Size="2">
@@ -154,7 +154,7 @@
 					<LSX Format="7" ID="0x6D6D616E">Inst. Process</LSX>
 				</LSX>
 				<LSX Format="9" ID="0x6EDE5114" Size="2">
-					<LSX Format="5" ID="0x7D6C61DB">-118.94</LSX>
+					<LSX Format="5" ID="0x7D6C61DB">-129.09</LSX>
 					<LSX Format="7" ID="0x6D6D616E">Detector temperature (°C)</LSX>
 				</LSX>
 				<LSX Format="9" ID="0xD9E15849" Size="6">
@@ -173,21 +173,21 @@
 				</LSX>
 				<LSX Format="9" ID="0xDBD3D737" Size="5">
 					<LSX Format="7" ID="0x6D6D616E">Objective</LSX>
-					<LSX Format="7" ID="0x7D6C61DB">x100</LSX>
-					<LSX Format="5" ID="0x8736F70">100</LSX>
-					<LSX Format="4" ID="0x6A6DE7D3">0</LSX>
+					<LSX Format="7" ID="0x7D6C61DB">x50</LSX>
+					<LSX Format="5" ID="0x8736F70">50</LSX>
+					<LSX Format="4" ID="0x6A6DE7D3">1</LSX>
 				</LSX>
 				<LSX Format="9" ID="0x7CC8E0D0" Size="5">
 					<LSX Format="7" ID="0x6D6D616E">Grating</LSX>
-					<LSX Format="7" ID="0x7D6C61DB">1800 gr/mm</LSX>
-					<LSX Format="5" ID="0x8736F70">1800</LSX>
-					<LSX Format="4" ID="0x6A6DE7D3">0</LSX>
+					<LSX Format="7" ID="0x7D6C61DB">600 gr/mm</LSX>
+					<LSX Format="5" ID="0x8736F70">600</LSX>
+					<LSX Format="4" ID="0x6A6DE7D3">3</LSX>
 				</LSX>
 				<LSX Format="9" ID="0x7C6CDBCB" Size="5">
 					<LSX Format="7" ID="0x6D6D616E">ND Filter</LSX>
-					<LSX Format="7" ID="0x7D6C61DB">10%</LSX>
-					<LSX Format="5" ID="0x8736F70">10</LSX>
-					<LSX Format="4" ID="0x6A6DE7D3">3</LSX>
+					<LSX Format="7" ID="0x7D6C61DB">1%</LSX>
+					<LSX Format="5" ID="0x8736F70">1</LSX>
+					<LSX Format="4" ID="0x6A6DE7D3">6</LSX>
 				</LSX>
 				<LSX Format="9" ID="0x6D7361DE" Size="5">
 					<LSX Format="7" ID="0x6D6D616E">Laser (nm)</LSX>
@@ -197,8 +197,8 @@
 				</LSX>
 				<LSX Format="9" ID="0x6BD4E2E7" Size="4">
 					<LSX Format="7" ID="0x6D6D616E">Spectro (nm)</LSX>
-					<LSX Format="5" ID="0x7D6C61DB">530.0006245</LSX>
-					<LSX Format="5" ID="0x8736F70">530.0006245</LSX>
+					<LSX Format="5" ID="0x7D6C61DB">746.404044885106</LSX>
+					<LSX Format="5" ID="0x8736F70">746.404044885106</LSX>
 				</LSX>
 				<LSX Format="9" ID="0x6D6C6F68" Size="4">
 					<LSX Format="7" ID="0x6D6D616E">Hole</LSX>
@@ -213,9 +213,9 @@
 				</LSX>
 				<LSX Format="9" ID="0x7B9DDBD5" Size="5">
 					<LSX Format="7" ID="0x6D6D616E">Laser. Pol.</LSX>
-					<LSX Format="7" ID="0x7D6C61DB">L/2 vis L</LSX>
-					<LSX Format="5" ID="0x8736F70">0</LSX>
-					<LSX Format="4" ID="0x6A6DE7D3">0</LSX>
+					<LSX Format="7" ID="0x7D6C61DB">No</LSX>
+					<LSX Format="5" ID="0x8736F70">6</LSX>
+					<LSX Format="4" ID="0x6A6DE7D3">6</LSX>
 				</LSX>
 				<LSX Format="9" ID="0x7B9EDBD5" Size="5">
 					<LSX Format="7" ID="0x6D6D616E">Raman. Pol.</LSX>
@@ -237,26 +237,13 @@
 				</LSX>
 				<LSX Format="9" ID="0x6FDAECD8" Size="6">
 					<LSX Format="7" ID="0x6D6D616E">StageXY</LSX>
-					<LSX Format="7" ID="0x7D6C61DB">Marzhauser</LSX>
-					<LSX Format="5" ID="0x8736F70">1768810209</LSX>
-					<LSX Format="4" ID="0x6A6DE7D3">0</LSX>
-					<LSX Format="7" ID="0xDCDCE5D6">Marzhauser</LSX>
-				</LSX>
-				<LSX Format="9" ID="0x6F61EED8" Size="6">
-					<LSX Format="7" ID="0x6D6D616E">StageZ</LSX>
-					<LSX Format="7" ID="0x7D6C61DB">Marzhauser</LSX>
-					<LSX Format="5" ID="0x8736F70">1768810209</LSX>
-					<LSX Format="4" ID="0x6A6DE7D3">0</LSX>
-					<LSX Format="7" ID="0xDCDCE5D6">Marzhauser</LSX>
-				</LSX>
-				<LSX Format="9" ID="0x800007A" Size="4">
-					<LSX Format="7" ID="0x6D6D616E">Z (µm)</LSX>
-					<LSX Format="5" ID="0x7D6C61DB">0</LSX>
-					<LSX Format="5" ID="0x8736F70">0</LSX>
-					<LSX Format="7" ID="0x7C696E75">µm</LSX>
+					<LSX Format="7" ID="0x7D6C61DB">Märzhauser B</LSX>
+					<LSX Format="5" ID="0x8736F70">1775232737</LSX>
+					<LSX Format="4" ID="0x6A6DE7D3">3</LSX>
+					<LSX Format="7" ID="0xDCDCE5D6">Märzhauser B</LSX>
 				</LSX>
 				<LSX Format="9" ID="0xD9D9DEDA" Size="2">
-					<LSX Format="5" ID="0x7D6C61DB">23</LSX>
+					<LSX Format="5" ID="0x7D6C61DB">15</LSX>
 					<LSX Format="7" ID="0x6D6D616E">Full time(s)</LSX>
 				</LSX>
 			</LSX>
@@ -275,7 +262,7 @@
 				</LSX>
 				<LSX Format="9" ID="0x6C7469D9" Size="2">
 					<LSX Format="7" ID="0x6D6D616E">Title</LSX>
-					<LSX Format="8" ID="0x7D6C61DB">ev21738_1</LSX>
+					<LSX Format="8" ID="0x7D6C61DB">map_x3-y2</LSX>
 				</LSX>
 				<LSX Format="9" ID="0x696DD0E4" Size="2">
 					<LSX Format="7" ID="0x6D6D616E">Remark</LSX>
@@ -283,77 +270,65 @@
 				</LSX>
 				<LSX Format="9" ID="0x6D746164" Size="2">
 					<LSX Format="7" ID="0x6D6D616E">Date</LSX>
-					<LSX Format="7" ID="0x7D6C61DB">27.06.2022 16:44</LSX>
+					<LSX Format="7" ID="0x7D6C61DB">19.08.2022 09:30</LSX>
 				</LSX>
 			</LSX>
 			<LSX Format="9" ID="0x7CECDBD7" Size="1">
 				<LSX Format="9" ID="0x0" Size="3">
 					<LSX Format="7" ID="0x6D6D616E">Acquired</LSX>
-					<LSX Format="7" ID="0x7D6C61DB">27.06.2022 16:44:15</LSX>
+					<LSX Format="7" ID="0x7D6C61DB">19.08.2022 09:30:34</LSX>
 				</LSX>
 			</LSX>
 		</LSX>
 		<LSX Format="4" ID="0xCADCE2DA">1</LSX>
-		<LSX Format="9" ID="0x6D6174E3" Size="4">
-			<LSX Format="4" ID="0xEBD4C9C8">17667864</LSX>
-			<LSX Format="9" ID="0x8736C70" Size="2">
-				<LSX Format="4" ID="0xEF484842">17664497</LSX>
-				<LSX Format="5" ID="0xDFCCE3D9">10</LSX>
-			</LSX>
-			<LSX Format="4" ID="0xD9DED343">17667209</LSX>
-			<LSX Format="4" ID="0xCF4E3E44">0</LSX>
-		</LSX>
 		<LSX Format="9" ID="0x6B6165E3" Size="2">
-			<LSX Format="4" ID="0x6DD9CDD5">133120</LSX>
+			<LSX Format="4" ID="0x6DD9CDD5">133184</LSX>
 			<LSX Format="5" ID="0xDFD9DE47">10</LSX>
 		</LSX>
 		<LSX Format="4" ID="0xD8DEE64D">0</LSX>
+		<LSX Format="9" ID="0x6D6174E3" Size="5">
+			<LSX Format="4" ID="0xEBD4C9C8">1916401201</LSX>
+			<LSX Format="9" ID="0x6D646FD9" Size="2">
+				<LSX Format="4" ID="0xEF484842">-462186827</LSX>
+			</LSX>
+			<LSX Format="9" ID="0x8736C70" Size="2">
+				<LSX Format="4" ID="0xEF484842">1916390241</LSX>
+				<LSX Format="5" ID="0xDFCCE3D9">10</LSX>
+			</LSX>
+			<LSX Format="4" ID="0xD9DED343">1916390986</LSX>
+			<LSX Format="4" ID="0xCF4E3E44">0</LSX>
+		</LSX>
 	</LSX_Tree>
-	<LSX_Matrix Format="6" ID="0x7D6CD4DB" Size="306">
+	<LSX_Matrix Format="6" ID="0x7D6CD4DB" Size="204">
 		<LSX_Row Format="6" Index="0" Size="34">
-		1570 1287 1145 1020 987 921 905 866 871 847 866 841 859 838 832 
-		834 817 832 808 807 798 824 814 817 797 812 804 802 798 803 
-		788 814 801 798 
+		275.5 214.5 206.5 184 168 171.5 158 160 169.5 154.5 156.5 147 152.5 159 144 
+		147.5 142 155 145 143 149 147 147 152 151.5 142.5 141 139.5 143 143 
+		139.5 133.5 141.5 144 
 		</LSX_Row>
 		<LSX_Row Format="6" Index="1" Size="34">
-		1645 1342 1180 1067 996 936 916 884 859 878 855 869 820 852 827 
-		829 823 814 823 814 813 795 786 799 790 793 794 788 808 780 
-		800 777 776 787 
+		295.5 234 206.5 183 165 164.5 145.5 143 163.5 152 142 146.5 146.5 142.5 145.5 
+		138.5 137.5 132.5 147.5 138.5 140 143 141 131.5 142.5 132 133 145.5 141 132 
+		123.5 136.5 128.5 139.5 
 		</LSX_Row>
 		<LSX_Row Format="6" Index="2" Size="34">
-		1626 1351 1166 1049 988 969 892 883 873 856 841 852 842 839 849 
-		820 800 832 817 819 825 796 828 799 820 818 799 807 787 790 
-		797 768 791 784 
+		257.5 210 198 171 168 168 147.5 161.5 174.5 161 157.5 152.5 157 144 151.5 
+		152 148 149.5 154.5 153.5 155.5 149.5 144 149 147 153.5 146 150 149.5 145.5 
+		146 140.5 133.5 136 
 		</LSX_Row>
 		<LSX_Row Format="6" Index="3" Size="34">
-		1655 1380 1194 1090 1019 982 948 932 911 900 883 878 851 866 852 
-		875 860 849 858 829 840 856 861 844 838 794 797 771 791 783 
-		788 795 777 775 
+		257 202 176 146 143 138 126 128 145.5 130 124.5 114 122.5 119 120.5 
+		125 134.5 125.5 118 126 122 120 120.5 125 115.5 114.5 116 122.5 119.5 115 
+		121 116.5 112.5 108.5 
 		</LSX_Row>
 		<LSX_Row Format="6" Index="4" Size="34">
-		1555 1314 1146 1039 959 911 898 886 870 855 848 844 841 829 824 
-		821 816 826 792 800 805 819 814 798 787 800 789 789 786 789 
-		795 781 783 776 
+		262 206.5 183 157.5 158 143.5 137 135 154 145.5 138.5 128.5 152 152.5 160 
+		156.5 150.5 154 160.5 147 152 158.5 148.5 142.5 156.5 147.5 157 147 149.5 146.5 
+		144.5 142.5 135.5 136.5 
 		</LSX_Row>
 		<LSX_Row Format="6" Index="5" Size="34">
-		1640 1343 1181 1052 984 948 917 896 892 862 853 858 843 839 834 
-		831 819 811 816 828 807 809 810 806 806 818 800 799 780 781 
-		775 795 781 788 
-		</LSX_Row>
-		<LSX_Row Format="6" Index="6" Size="34">
-		1620 1296 1143 1064 974 947 905 899 866 849 836 844 839 843 831 
-		844 835 835 833 812 804 814 813 801 823 786 796 797 794 784 
-		809 777 768 797 
-		</LSX_Row>
-		<LSX_Row Format="6" Index="7" Size="34">
-		1614 1324 1162 1057 981 956 906 894 858 875 857 860 846 841 847 
-		822 843 835 829 815 812 804 814 812 809 807 804 792 801 789 
-		793 790 777 788 
-		</LSX_Row>
-		<LSX_Row Format="6" Index="8" Size="34">
-		1629 1362 1171 1069 1008 947 931 896 877 872 866 867 873 844 853 
-		847 847 822 837 817 823 818 809 827 823 792 817 818 801 801 
-		794 787 783 796 
+		254.5 206.5 178 169 148.5 139 140.5 136.5 147.5 148.5 135 137.5 131.5 130 120 
+		125 122.5 124 124.5 133.5 129 125.5 115.5 114 110 120 108.5 121 114 116.5 
+		115.5 119.5 108.5 108.5 
 		</LSX_Row>
 	</LSX_Matrix>
 </LSX_Data>

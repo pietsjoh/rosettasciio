@@ -165,21 +165,24 @@ class JobinYvonXMLReader:
         ## use first extracted value
         for key, value in self.original_metadata["experimental setup"].items():
             if isinstance(value, dict):
-                self.original_metadata["experimental setup"][
-                    key
-                ] = self.original_metadata["experimental setup"][key]["1"]
+                if bool(value):
+                    self.original_metadata["experimental setup"][
+                        key
+                    ] = self.original_metadata["experimental setup"][key]["1"]
 
         for key, value in self.original_metadata["date"].items():
             if isinstance(value, dict):
-                self.original_metadata["date"][key] = self.original_metadata["date"][
-                    key
-                ]["1"]
+                if bool(value):
+                    self.original_metadata["date"][key] = self.original_metadata[
+                        "date"
+                    ][key]["1"]
 
         for key, value in self.original_metadata["file information"].items():
             if isinstance(value, dict):
-                self.original_metadata["file information"][
-                    key
-                ] = self.original_metadata["file information"][key]["1"]
+                if bool(value):
+                    self.original_metadata["file information"][
+                        key
+                    ] = self.original_metadata["file information"][key]["1"]
 
         ## convert strings to float
         for key in convert_to_numeric:

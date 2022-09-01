@@ -281,6 +281,7 @@ class JobinYvonXMLReader:
         assert isinstance(array, np.ndarray)
         assert hasattr(array, "size")
         assert array.size >= 2
+        scale = np.abs(array[0] - array[-1]) / (array.size - 1)
         if array.size >= 3:
             abs_diff_begin = np.abs(array[0] - array[1])
             abs_diff_end = np.abs(array[-1] - array[-2])
@@ -297,9 +298,9 @@ class JobinYvonXMLReader:
                 and self._use_uniform_wavelength_axis
             ):
                 _logger.warning(
-                    f"The difference between consecutive entrys of the {name}-axis-scale varies ({abs_diff_compare} between first 2 and last 2). Consider using a non-uniform-axis."
+                    f"The difference between consecutive entrys (scale) of the {name}-axis varies (from {abs_diff_begin} to {abs_diff_end} between the first 2 and last 2 entrys, difference: {abs_diff_compare}). {scale} will be used for scale. Consider using a non-uniform-axis."
                 )
-        return np.abs(array[0] - array[-1]) / (array.size - 1)
+        return scale
 
     def _set_nav_axis(self, xml_element, tag):
         """Helper method for setting navigation axes.

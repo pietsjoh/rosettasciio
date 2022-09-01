@@ -36,8 +36,13 @@ testfile_spec_abs_wavenumber_path = (
 testfile_spec_energy_path = (testfile_dir / "jobinyvon_test_spec_3s_eV.xml").resolve()
 testfile_linescan_path = (testfile_dir / "jobinyvon_test_linescan.xml").resolve()
 testfile_map_path = (testfile_dir / "jobinyvon_test_map_x3-y2.xml").resolve()
+testfile_map_rotated_path = (
+    testfile_dir / "jobinyvon_test_map_x2-y2_rotated.xml"
+).resolve()
 testfile_glue_path = (testfile_dir / "jobinyvon_test_spec_range.xml").resolve()
-testfile_spec_count_path = (testfile_dir / "jobinyvon_test_spec_3s_counts.xml").resolve()
+testfile_spec_count_path = (
+    testfile_dir / "jobinyvon_test_spec_3s_counts.xml"
+).resolve()
 
 
 class TestSpec:
@@ -225,7 +230,7 @@ class TestSpec:
     def test_original_metadata(self):
         spec_original_metadata = {
             "date": {"Acquired": "27.06.2022 16:26:24"},
-            "experimental setup": {
+            "experimental_setup": {
                 "Acq. time (s)": 1.0,
                 "Accumulations": 2.0,
                 "Range": "Visible",
@@ -261,7 +266,7 @@ class TestSpec:
                 "signal type": "Intens",
                 "signal units": "Cnt/sec",
             },
-            "file information": {
+            "file_information": {
                 "Project": "A",
                 "Sample": "test",
                 "Site": "C",
@@ -646,12 +651,20 @@ class TestMap:
         cls.s_non_uniform = hs.load(
             testfile_map_path, reader="Jobin Yvon", use_uniform_wavelength_axis=False
         )
+        cls.s_rotated = hs.load(testfile_map_rotated_path, reader="Jobin Yvon")
 
     @classmethod
     def teardown_class(cls):
         del cls.s
         del cls.s_non_uniform
+        del cls.s_rotated
         gc.collect()
+
+    def test_rotation_angle(self):
+        original_metadata = self.s_rotated.original_metadata.as_dictionary()
+        np.testing.assert_allclose(
+            original_metadata["experimental_setup"]["angle (rad)"], -0.532322511232846
+        )
 
     def test_data(self):
         map_row0 = [

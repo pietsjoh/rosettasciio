@@ -25,11 +25,6 @@ import importlib.util
 
 _logger = logging.getLogger(__name__)
 
-lumispy_installed = True
-if importlib.util.find_spec("lumispy") is None:
-    lumispy_installed = False
-    _logger.warning("Cannot find package lumispy, using '' as signal_type.")
-
 
 class JobinYvonXMLReader:
     """Class to read Jobin Yvon .xml-files.
@@ -59,46 +54,48 @@ class JobinYvonXMLReader:
     """
 
     def __init__(self, file_path, use_uniform_wavelength_axis=True, **kwargs):
-        self.use_uniform_wavelength_axis = use_uniform_wavelength_axis
-        self.file_path = file_path
-        self.metadata = dict()
-        self.reverse_wavelength = False
+        self._file_path = file_path
+        self._use_uniform_wavelength_axis = use_uniform_wavelength_axis
+        self._reverse_wavelength = False
+
+        self._lumispy_installed = True
+        if importlib.util.find_spec("lumispy") is None:
+            self._lumispy_installed = False
+            _logger.warning("Cannot find package lumispy, using '' as signal_type.")
 
     @staticmethod
-    def get_id(xml_element):
+    def _get_id(xml_element):
         return xml_element.attrib["ID"]
 
     @staticmethod
-    def get_size(xml_element):
+    def _get_size(xml_element):
         return int(xml_element.attrib["Size"])
 
     def parse_file(self):
         """First parse through file to extract data/metadata positions."""
-        tree = ET.parse(self.file_path)
+        tree = ET.parse(self._file_path)
         root = tree.getroot()
 
         lsx_tree_list = root.findall("LSX_Tree")
         assert len(lsx_tree_list) == 1
-        self.lsx_tree = lsx_tree_list[0]
+        lsx_tree = lsx_tree_list[0]
 
         lsx_matrix_list = root.findall("LSX_Matrix")
         assert len(lsx_matrix_list) == 1
-        self.lsx_matrix = lsx_matrix_list[0]
+        self._lsx_matrix = lsx_matrix_list[0]
 
-        self.original_metadata = {}
-
-        for child in self.lsx_tree:
-            id = self.get_id(child)
+        for child in lsx_tree:
+            id = self._get_id(child)
             if id == "0x6C62D4D9":
-                self.metadata_head = child
+                self._metadata_head = child
             if id == "0x6C7469D9":
-                self.title = child.text
+                self._title = child.text
             if id == "0x6D707974":
-                self.measurement_type = child.text
+                self._measurement_type = child.text
             if id == "0x7A74D9D6":
                 for child2 in child:
-                    if self.get_id(child2) == "0x7B697861":
-                        self.nav_tree = child2
+                    if self._get_id(child2) == "0x7B697861":
+                        self._nav_tree = child2
 
     def _get_metadata_values(self, xml_element, tag):
         """Helper method to extract information from metadata xml-element.
@@ -130,11 +127,11 @@ class JobinYvonXMLReader:
         for child in xml_element:
             values = {}
             for child2 in child:
-                if self.get_id(child2) == "0x6D6D616E":
+                if self._get_id(child2) == "0x6D6D616E":
                     key = child2.text
-                if self.get_id(child2) == "0x7D6C61DB":
+                if self._get_id(child2) == "0x7D6C61DB":
                     values["1"] = child2.text
-                if self.get_id(child2) == "0x8736F70":
+                if self._get_id(child2) == "0x8736F70":
                     values["2"] = child2.text
             metadata_xml_element[key] = values
         self.original_metadata[tag] = metadata_xml_element
@@ -238,9 +235,10 @@ class JobinYvonXMLReader:
 
     def get_original_metadata(self):
         """Extracts metadata from file."""
-        assert hasattr(self, "metadata_head")
-        for child in self.metadata_head:
-            id = self.get_id(child)
+        assert hasattr(self, "_metadata_head")
+        self.original_metadata = {}
+        for child in self._metadata_head:
+            id = self._get_id(child)
             if id == "0x7CECDBD7":
                 date = child
             if id == "0x8716361":
@@ -253,16 +251,25 @@ class JobinYvonXMLReader:
         self._get_metadata_values(date, "date")
         self._get_metadata_values(metadata, "experimental setup")
         self._get_metadata_values(file_specs, "file information")
-        self.original_metadata["experimental setup"][
-            "measurement_type"
-        ] = self.measurement_type
-        self.original_metadata["experimental setup"]["title"] = self.title
+        try:
+            self.original_metadata["experimental setup"][
+                "measurement_type"
+            ] = self._measurement_type
+        except AttributeError:
+            pass
+        try:
+            self.original_metadata["experimental setup"]["title"] = self._title
+        except AttributeError:
+            pass
         self._clean_up_metadata()
 
-    def get_scale(self, array, name):
+    def _get_scale(self, array, name):
         """Get scale for navigation/signal axes.
 
         Furthermore, checks whether the axis is uniform. Throws warning when this not the case.
+        This check is performed by comparing the difference between the first 2 and last 2 values.
+        The decision to use a non-uniform/uniform data-axis is left to the user
+        (use_uniform_wavelength_axis).
 
         Parameters
         ----------
@@ -281,18 +288,21 @@ class JobinYvonXMLReader:
             min_array = np.amin(array)
             if not np.isclose(min_array, 0):
                 rel_diff_compare = abs_diff_compare / min_array
-                if rel_diff_compare > 0.01 and self.use_uniform_wavelength_axis:
+                if rel_diff_compare > 0.01 and self._use_uniform_wavelength_axis:
                     _logger.warning(
                         f"The relative variation of the {name}-axis-scale ({rel_diff_compare}) is greater than 1%. Using a non-uniform-axis is recommended."
                     )
-            if not np.isclose(abs_diff_compare, 0) and self.use_uniform_wavelength_axis:
+            if (
+                not np.isclose(abs_diff_compare, 0)
+                and self._use_uniform_wavelength_axis
+            ):
                 _logger.warning(
                     f"The difference between consecutive entrys of the {name}-axis-scale varies ({abs_diff_compare} between first 2 and last 2). Consider using a non-uniform-axis."
                 )
         return np.abs(array[0] - array[-1]) / (array.size - 1)
 
     def _set_nav_axis(self, xml_element, tag):
-        """Helper method set navigation axes.
+        """Helper method for setting navigation axes.
 
         Parameters
         ----------
@@ -305,7 +315,7 @@ class JobinYvonXMLReader:
         has_nav = True
         nav_dict = dict()
         for child in xml_element:
-            id = self.get_id(child)
+            id = self._get_id(child)
             if id == "0x6D707974":
                 nav_dict["name"] = child.text
             if id == "0x7C696E75":
@@ -316,7 +326,7 @@ class JobinYvonXMLReader:
                 if nav_size < 2:
                     has_nav = False
                 else:
-                    nav_dict["scale"] = self.get_scale(nav_array, tag)
+                    nav_dict["scale"] = self._get_scale(nav_array, tag)
                     nav_dict["offset"] = nav_array[0]
                     nav_dict["size"] = nav_size
                     nav_dict["navigate"] = True
@@ -335,7 +345,7 @@ class JobinYvonXMLReader:
             head level metadata element
         """
         for child in xml_element:
-            id = self.get_id(child)
+            id = self._get_id(child)
             ## contains also intensity-minima/maxima-values for each data-row (ignored by this reader)
             if id == "0x6D707974":
                 self.original_metadata["experimental setup"]["signal type"] = child.text
@@ -345,7 +355,7 @@ class JobinYvonXMLReader:
                 ] = child.text
 
     def _set_signal_axis(self, xml_element):
-        """Helper method set signal axes.
+        """Helper method to extract signal-axis information.
 
         Parameters
         ----------
@@ -356,14 +366,14 @@ class JobinYvonXMLReader:
         """
         wavelength_dict = dict()
         for child in xml_element:
-            id = self.get_id(child)
+            id = self._get_id(child)
             if id == "0x7D6CD4DB":
                 wavelength_array = np.fromstring(child.text.strip(), sep=" ")
                 if wavelength_array[0] > wavelength_array[1]:
                     wavelength_array = wavelength_array[::-1]
-                    self.reverse_wavelength = True
-                if self.use_uniform_wavelength_axis:
-                    wavelength_dict["scale"] = self.get_scale(
+                    self._reverse_wavelength = True
+                if self._use_uniform_wavelength_axis:
+                    wavelength_dict["scale"] = self._get_scale(
                         wavelength_array, "wavelength"
                     )
                     wavelength_dict["offset"] = wavelength_array[0]
@@ -391,80 +401,82 @@ class JobinYvonXMLReader:
         self.axes["wavelength_dict"] = wavelength_dict
 
     def _sort_nav_axes(self):
-        """sort the navigation axis, such that (X, Y, Spectrum) = (1, 0, 2) (for map)
+        """Sort the navigation axis, such that (X, Y, Spectrum) = (1, 0, 2) (for map)
         or (X/Y, Spectrum) = (0, 1) or (Spectrum) = (0) (for linescan/spectrum).
         """
         self.axes["wavelength_dict"]["index_in_array"] = len(self.axes) - 1
-        if self.has_nav2:
+        if self._has_nav2:
             self.axes["nav2_dict"]["index_in_array"] = 0
-            if self.has_nav1:
+            if self._has_nav1:
                 self.axes["nav1_dict"]["index_in_array"] = 1
-        elif self.has_nav1 and not self.has_nav2:
+        elif self._has_nav1 and not self._has_nav2:
             self.axes["nav1_dict"]["index_in_array"] = 0
         self.axes = sorted(self.axes.values(), key=lambda item: item["index_in_array"])
 
     def get_axes(self):
         """Extract navigation/signal axes data from file."""
-        assert hasattr(self, "nav_tree")
+        assert hasattr(self, "_nav_tree")
 
         self.axes = dict()
-        self.has_nav1 = False
-        self.has_nav2 = False
-        for child in self.nav_tree:
-            if self.get_id(child) == "0x0":
+        self._has_nav1 = False
+        self._has_nav2 = False
+        for child in self._nav_tree:
+            if self._get_id(child) == "0x0":
                 self._set_signal_type(child)
-            if self.get_id(child) == "0x1":
+            if self._get_id(child) == "0x1":
                 self._set_signal_axis(child)
-            if self.get_id(child) == "0x2":
-                self.has_nav1, self.nav1_size = self._set_nav_axis(child, "nav1_dict")
-            if self.get_id(child) == "0x3":
-                self.has_nav2, self.nav2_size = self._set_nav_axis(child, "nav2_dict")
+            if self._get_id(child) == "0x2":
+                self._has_nav1, self._nav1_size = self._set_nav_axis(child, "nav1_dict")
+            if self._get_id(child) == "0x3":
+                self._has_nav2, self._nav2_size = self._set_nav_axis(child, "nav2_dict")
 
         self._sort_nav_axes()
 
     def get_data(self):
         """Extract data from file."""
-        assert hasattr(self, "lsx_matrix")
+        assert hasattr(self, "_lsx_matrix")
 
-        sig_raw = self.lsx_matrix.findall("LSX_Row")
+        data_raw = self._lsx_matrix.findall("LSX_Row")
         ## lexicographical ordering -> 3x3 map -> 9 rows
-        num_rows = len(sig_raw)
+        num_rows = len(data_raw)
         if num_rows == 1:
             ## Spectrum
-            self.data = np.fromstring(sig_raw[0].text.strip(), sep=" ")
-            if self.reverse_wavelength:
+            self.data = np.fromstring(data_raw[0].text.strip(), sep=" ")
+            if self._reverse_wavelength:
                 self.data = self.data[::-1]
         else:
             ## linescan or map
-            num_cols = self.get_size(sig_raw[0])
+            num_cols = self._get_size(data_raw[0])
             self.data = np.empty((num_rows, num_cols))
-            for i, row in enumerate(sig_raw):
+            for i, row in enumerate(data_raw):
                 row_array = np.fromstring(row.text.strip(), sep=" ")
-                if self.reverse_wavelength:
+                if self._reverse_wavelength:
                     row_array = row_array[::-1]
                 self.data[i, :] = row_array
             ## reshape the array (lexicographic -> cartesian)
             ## reshape depends on available axes
-            if self.has_nav2:
-                if self.has_nav1:
+            if self._has_nav2:
+                if self._has_nav1:
                     self.data = np.reshape(
-                        self.data, (self.nav2_size, self.nav1_size, num_cols)
+                        self.data, (self._nav2_size, self._nav1_size, num_cols)
                     )
                 else:
-                    self.data = np.reshape(self.data, (self.nav2_size, num_cols))
-            elif self.has_nav1 and not self.has_nav2:
-                self.data = np.reshape(self.data, (self.nav1_size, num_cols))
+                    self.data = np.reshape(self.data, (self._nav2_size, num_cols))
+            elif self._has_nav1 and not self._has_nav2:
+                self.data = np.reshape(self.data, (self._nav1_size, num_cols))
 
     @property
-    def record_by(self):
-        if self.measurement_type == "Spectrum":
+    def _record_by(self):
+        if self._measurement_type == "Spectrum":
             return "spectrum"
-        if self.measurement_type == "SpIm":
+        elif self._measurement_type == "SpIm":
             return "image"
+        else:
+            return ""
 
     @property
-    def signal_type(self):
-        if lumispy_installed:
+    def _signal_type(self):
+        if self._lumispy_installed:
             return "Luminescence"
         else:
             return ""
@@ -480,6 +492,7 @@ class JobinYvonXMLReader:
     ## account for missing keys in original metadata (try/except)
     def map_metadata(self):
         """Maps original_metadata to metadata dictionary."""
+        self.metadata = dict()
         if "General" not in self.metadata:
             self.metadata["General"] = {}
         if "Signal" not in self.metadata:
@@ -494,8 +507,8 @@ class JobinYvonXMLReader:
                 "Spectral_image": {},
             }
 
-        self.metadata["General"]["title"] = self.title
-        self.metadata["General"]["original_filename"] = self.file_path.name
+        self.metadata["General"]["title"] = self._title
+        self.metadata["General"]["original_filename"] = self._file_path.name
         self._set_metadata(
             self.metadata["General"],
             "notes",
@@ -509,7 +522,7 @@ class JobinYvonXMLReader:
         except KeyError:
             pass
 
-        self.metadata["Signal"]["record_by"] = self.record_by
+        self.metadata["Signal"]["record_by"] = self._record_by
         try:
             intensity_axis = self.original_metadata["experimental setup"]["signal type"]
             intensity_units = self.original_metadata["experimental setup"][
@@ -522,10 +535,12 @@ class JobinYvonXMLReader:
                 intensity_axis = "Intensity"
             if intensity_units == "Cnt/sec":
                 intensity_units = "Counts/s"
+            if intensity_units == "Cnt":
+                intensity_units = "Counts"
             self.metadata["Signal"][
                 "quantity"
             ] = f"{intensity_axis} ({intensity_units})"
-            self.metadata["Signal"]["signal_type"] = self.signal_type
+            self.metadata["Signal"]["signal_type"] = self._signal_type
 
         self._set_metadata(
             self.metadata["Sample"],
@@ -736,7 +751,7 @@ def file_reader(file_path, use_uniform_wavelength_axis=True, **kwds):
     if not isinstance(file_path, Path):
         file_path = Path(file_path)
     jy = JobinYvonXMLReader(
-        file_path, use_uniform_wavelength_axis=use_uniform_wavelength_axis
+        file_path=file_path, use_uniform_wavelength_axis=use_uniform_wavelength_axis
     )
     jy.parse_file()
     jy.get_original_metadata()

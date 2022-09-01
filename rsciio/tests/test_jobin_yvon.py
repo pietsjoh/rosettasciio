@@ -37,6 +37,7 @@ testfile_spec_energy_path = (testfile_dir / "jobinyvon_test_spec_3s_eV.xml").res
 testfile_linescan_path = (testfile_dir / "jobinyvon_test_linescan.xml").resolve()
 testfile_map_path = (testfile_dir / "jobinyvon_test_map_x3-y2.xml").resolve()
 testfile_glue_path = (testfile_dir / "jobinyvon_test_spec_range.xml").resolve()
+testfile_spec_count_path = (testfile_dir / "jobinyvon_test_spec_3s_counts.xml").resolve()
 
 
 class TestSpec:
@@ -67,6 +68,11 @@ class TestSpec:
             reader="Jobin Yvon",
             use_uniform_wavelength_axis=True,
         )
+        cls.s_count = hs.load(
+            testfile_spec_count_path,
+            reader="Jobin Yvon",
+            use_uniform_wavelength_axis=True,
+        )
 
     @classmethod
     def teardown_class(cls):
@@ -76,6 +82,9 @@ class TestSpec:
         del cls.s_abs_wn
         del cls.s_ev
         gc.collect()
+
+    def test_intensity_count_unit(self):
+        assert self.s_count.metadata.Signal.quantity == "Intensity (Counts)"
 
     def test_signal_units(self):
         assert self.s_wn.axes_manager.as_dictionary()["axis-0"]["units"] == "1/cm"

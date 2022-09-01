@@ -32,17 +32,38 @@ if importlib.util.find_spec("lumispy") is None:
 
 
 class JobinYvonXMLReader:
+    """Class to read Jobin Yvon .xml-files.
+
+    The file is read using xml.etree.ElementTree.
+    Each element can have the following attributes: attrib, tag, text.
+    Moreover, non-leaf-elements are iterable (iterate over child-nodes).
+    In this specific format, the tags not useful to extract information.
+    Instead, the "ID"-entry in attrib is used to identify the sort of information.
+    The IDs are consistent for the tested files.
+
+    Parameters
+    ----------
+    file_path: pathlib.Path
+        path to the to be read file
+
+    use_uniform_wavelength_axis: bool
+        decides whether to use uniform or non-uniform data axis
+
+    Attributes
+    ----------
+    data, metadata, original_metadata, axes
+
+    Methods
+    -------
+    parse_file, get_original_metadata, get_axes, get_data, map_metadata
+    """
+
     def __init__(self, file_path, use_uniform_wavelength_axis=True, **kwargs):
         self.use_uniform_wavelength_axis = use_uniform_wavelength_axis
         self.file_path = file_path
         self.metadata = dict()
         self.reverse_wavelength = False
 
-    ## each element of the xml-tree has the attributes attrib, tag, text
-    ## jobin-yvon-xml only has the tags LSX_DATA,
-    ## attrib contains the format, id and size (in the tag in the original xml-file)
-    ## the actual content between the tags is stored in the attribute text
-    ## format specifies the datatype of the text
     @staticmethod
     def get_id(xml_element):
         return xml_element.attrib["ID"]
@@ -166,6 +187,7 @@ class JobinYvonXMLReader:
         ## use first extracted value
         for key, value in self.original_metadata["experimental setup"].items():
             if isinstance(value, dict):
+                # only if there is an entry/value
                 if bool(value):
                     self.original_metadata["experimental setup"][
                         key
@@ -409,31 +431,29 @@ class JobinYvonXMLReader:
         num_rows = len(sig_raw)
         if num_rows == 1:
             ## Spectrum
-            self.sig_array = np.fromstring(sig_raw[0].text.strip(), sep=" ")
+            self.data = np.fromstring(sig_raw[0].text.strip(), sep=" ")
             if self.reverse_wavelength:
-                self.sig_array = self.sig_array[::-1]
+                self.data = self.data[::-1]
         else:
             ## linescan or map
             num_cols = self.get_size(sig_raw[0])
-            self.sig_array = np.empty((num_rows, num_cols))
+            self.data = np.empty((num_rows, num_cols))
             for i, row in enumerate(sig_raw):
                 row_array = np.fromstring(row.text.strip(), sep=" ")
                 if self.reverse_wavelength:
                     row_array = row_array[::-1]
-                self.sig_array[i, :] = row_array
+                self.data[i, :] = row_array
             ## reshape the array (lexicographic -> cartesian)
             ## reshape depends on available axes
             if self.has_nav2:
                 if self.has_nav1:
-                    self.sig_array = np.reshape(
-                        self.sig_array, (self.nav2_size, self.nav1_size, num_cols)
+                    self.data = np.reshape(
+                        self.data, (self.nav2_size, self.nav1_size, num_cols)
                     )
                 else:
-                    self.sig_array = np.reshape(
-                        self.sig_array, (self.nav2_size, num_cols)
-                    )
+                    self.data = np.reshape(self.data, (self.nav2_size, num_cols))
             elif self.has_nav1 and not self.has_nav2:
-                self.sig_array = np.reshape(self.sig_array, (self.nav1_size, num_cols))
+                self.data = np.reshape(self.data, (self.nav1_size, num_cols))
 
     @property
     def record_by(self):
@@ -705,13 +725,13 @@ class JobinYvonXMLReader:
             pass
 
 
-def file_reader(file_path, lazy=False, use_uniform_wavelength_axis=True, **kwds):
-    """Reads a file with jobin-yvon-xml-format.
+def file_reader(file_path, use_uniform_wavelength_axis=True, **kwds):
+    """Reads a file with Jobin Yvon .xml-format.
 
     Parameters
     ----------
     use_uniform_wavelength_axis: bool
-        can be specified to choose between non-uniform or uniform navigation axes
+        can be specified to choose between non-uniform or uniform signal/data-axis
     """
     if not isinstance(file_path, Path):
         file_path = Path(file_path)
@@ -724,7 +744,7 @@ def file_reader(file_path, lazy=False, use_uniform_wavelength_axis=True, **kwds)
     jy.get_data()
     jy.map_metadata()
     dictionary = {
-        "data": jy.sig_array,
+        "data": jy.data,
         "axes": jy.axes,
         "metadata": deepcopy(jy.metadata),
         "original_metadata": deepcopy(jy.original_metadata),

@@ -674,6 +674,16 @@ class TestMap:
             original_metadata["experimental_setup"]["angle (rad)"], -0.532322511232846
         )
 
+        metadata = self.s_rotated.metadata.as_dictionary()
+        np.testing.assert_allclose(
+            metadata["Acquisition_instrument"]["Spectral_image"]["angle"],
+            -0.532322511232846,
+        )
+
+        assert (
+            metadata["Acquisition_instrument"]["Spectral_image"]["angle_units"] == "rad"
+        )
+
     def test_data(self):
         map_row0 = [
             275.5,

@@ -716,6 +716,18 @@ class JobinYvonXMLReader:
             "Raman Pol. (°)",
         )
 
+        self._set_metadata(
+            self.metadata["Acquisition_instrument"]["Spectral_image"],
+            "angle",
+            self.original_metadata["experimental_setup"],
+            "angle (rad)",
+        )
+
+        if "angle (rad)" in self.original_metadata["experimental_setup"]:
+            self.metadata["Acquisition_instrument"]["Spectral_image"][
+                "angle_units"
+            ] = "rad"
+
         ## calculate and set integration time
         try:
             integration_time = (

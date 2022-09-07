@@ -96,6 +96,11 @@ class TestSpec:
         assert self.s_abs_wn.axes_manager.as_dictionary()["axis-0"]["units"] == "1/cm"
         assert self.s_ev.axes_manager.as_dictionary()["axis-0"]["units"] == "eV"
 
+    def test_signal_names(self):
+        assert self.s_wn.axes_manager.as_dictionary()["axis-0"]["name"] == "Raman Shift"
+        assert self.s_abs_wn.axes_manager.as_dictionary()["axis-0"]["name"] == "Wavenumber"
+        assert self.s_ev.axes_manager.as_dictionary()["axis-0"]["name"] == "Energy"
+
     def test_integration_time(self):
         np.testing.assert_allclose(
             self.s_wn.metadata["Acquisition_instrument"]["Detector"][

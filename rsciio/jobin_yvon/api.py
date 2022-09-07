@@ -375,6 +375,7 @@ class JobinYvonXMLReader:
             axis name
         """
         wavelength_dict = dict()
+        wavelength_dict["navigate"] = False
         for child in xml_element:
             id = self._get_id(child)
             if id == "0x7D6CD4DB":
@@ -390,24 +391,26 @@ class JobinYvonXMLReader:
                     wavelength_dict["size"] = wavelength_array.size
                 else:
                     wavelength_dict["axis"] = wavelength_array
-            if id == "0x6D707974":
-                wavelength_dict["name"] = child.text
             if id == "0x7C696E75":
-                wavelength_dict["units"] = child.text
-        if wavelength_dict["name"] == "Spectr":
-            if wavelength_dict["units"][:2] == "1/":
-                wavelength_dict["name"] = "Wavenumber"
-                wavelength_dict["units"] = wavelength_dict["units"][:4]
-            elif wavelength_dict["units"] == "nm":
-                wavelength_dict["name"] = "Wavelength"
-            elif wavelength_dict["units"] == "eV":
-                wavelength_dict["name"] = "Energy"
-            else:
-                _logger.warning(
-                    "Cannot extract type of signal axis, using wavelength as name. Check on axis units (only nm, eV, 1/cm can be read)"
-                )
-                wavelength_dict["name"] = "Wavelength"
-        wavelength_dict["navigate"] = False
+                units = child.text
+                if "/" in units and units[-3:] == "abs":
+                    wavelength_dict["name"] = "Wavenumber"
+                    wavelength_dict["units"] = units[:-4]
+                elif "/" in units and units[-1] == "m":
+                    wavelength_dict["name"] = "Raman Shift"
+                    wavelength_dict["units"] = units
+                elif units[-2:] == "eV":
+                    wavelength_dict["name"] = "Energy"
+                    wavelength_dict["units"] = units
+                elif "/" not in units and units[-1] == "m":
+                    wavelength_dict["name"] = "Wavelength"
+                    wavelength_dict["units"] = units
+                else:
+                    _logger.warning(
+                    "Cannot extract type of signal axis from units, using wavelength as name."
+                    )
+                    wavelength_dict["name"] = "Wavelength"
+                    wavelength_dict["units"] = units
         self.axes["wavelength_dict"] = wavelength_dict
 
     def _sort_nav_axes(self):

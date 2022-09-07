@@ -16,12 +16,13 @@
 # You should have received a copy of the GNU General Public License
 # along with HyperSpy. If not, see <https://www.gnu.org/licenses/#GPL>.
 
-from pathlib import Path
-import xml.etree.ElementTree as ET
-import numpy as np
 import logging
-from copy import deepcopy
 import importlib.util
+import xml.etree.ElementTree as ET
+from pathlib import Path
+from copy import deepcopy
+
+import numpy as np
 
 _logger = logging.getLogger(__name__)
 
@@ -407,7 +408,7 @@ class JobinYvonXMLReader:
                     wavelength_dict["units"] = units
                 else:
                     _logger.warning(
-                    "Cannot extract type of signal axis from units, using wavelength as name."
+                        "Cannot extract type of signal axis from units, using wavelength as name."
                     )
                     wavelength_dict["name"] = "Wavelength"
                     wavelength_dict["units"] = units

@@ -17,10 +17,11 @@
 # along with HyperSpy. If not, see <https://www.gnu.org/licenses/#GPL>.
 
 import gc
-import numpy as np
 import pytest
 from pathlib import Path
 from copy import deepcopy
+
+import numpy as np
 
 hs = pytest.importorskip("hyperspy.api", reason="hyperspy not installed")
 
@@ -98,7 +99,9 @@ class TestSpec:
 
     def test_signal_names(self):
         assert self.s_wn.axes_manager.as_dictionary()["axis-0"]["name"] == "Raman Shift"
-        assert self.s_abs_wn.axes_manager.as_dictionary()["axis-0"]["name"] == "Wavenumber"
+        assert (
+            self.s_abs_wn.axes_manager.as_dictionary()["axis-0"]["name"] == "Wavenumber"
+        )
         assert self.s_ev.axes_manager.as_dictionary()["axis-0"]["name"] == "Energy"
 
     def test_integration_time(self):

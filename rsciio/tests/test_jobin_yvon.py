@@ -52,32 +52,32 @@ class TestSpec:
         cls.s = hs.load(
             testfile_spec_wavelength_path,
             reader="JobinYvon",
-            use_uniform_wavelength_axis=True,
+            use_uniform_signal_axis=True,
         )
         cls.s_non_uniform = hs.load(
             testfile_spec_wavelength_path,
             reader="JobinYvon",
-            use_uniform_wavelength_axis=False,
+            use_uniform_signal_axis=False,
         )
         cls.s_wn = hs.load(
             testfile_spec_wavenumber_path,
             reader="JobinYvon",
-            use_uniform_wavelength_axis=True,
+            use_uniform_signal_axis=True,
         )
         cls.s_abs_wn = hs.load(
             testfile_spec_abs_wavenumber_path,
             reader="JobinYvon",
-            use_uniform_wavelength_axis=True,
+            use_uniform_signal_axis=True,
         )
         cls.s_ev = hs.load(
             testfile_spec_energy_path,
             reader="JobinYvon",
-            use_uniform_wavelength_axis=True,
+            use_uniform_signal_axis=True,
         )
         cls.s_count = hs.load(
             testfile_spec_count_path,
             reader="JobinYvon",
-            use_uniform_wavelength_axis=True,
+            use_uniform_signal_axis=True,
         )
 
     @classmethod
@@ -427,12 +427,12 @@ class TestLinescan:
         cls.s = hs.load(
             testfile_linescan_path,
             reader="JobinYvon",
-            use_uniform_wavelength_axis=True,
+            use_uniform_signal_axis=True,
         )
         cls.s_non_uniform = hs.load(
             testfile_linescan_path,
             reader="JobinYvon",
-            use_uniform_wavelength_axis=False,
+            use_uniform_signal_axis=False,
         )
 
     @classmethod
@@ -654,10 +654,10 @@ class TestMap:
     @classmethod
     def setup_class(cls):
         cls.s = hs.load(
-            testfile_map_path, reader="JobinYvon", use_uniform_wavelength_axis=True
+            testfile_map_path, reader="JobinYvon", use_uniform_signal_axis=True
         )
         cls.s_non_uniform = hs.load(
-            testfile_map_path, reader="JobinYvon", use_uniform_wavelength_axis=False
+            testfile_map_path, reader="JobinYvon", use_uniform_signal_axis=False
         )
         cls.s_rotated = hs.load(testfile_map_rotated_path, reader="JobinYvon")
 
@@ -942,10 +942,10 @@ class TestGlue:
     @classmethod
     def setup_class(cls):
         cls.s = hs.load(
-            testfile_glue_path, reader="JobinYvon", use_uniform_wavelength_axis=True
+            testfile_glue_path, reader="JobinYvon", use_uniform_signal_axis=True
         )
         cls.s_non_uniform = hs.load(
-            testfile_glue_path, reader="JobinYvon", use_uniform_wavelength_axis=False
+            testfile_glue_path, reader="JobinYvon", use_uniform_signal_axis=False
         )
 
     @classmethod

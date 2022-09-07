@@ -9,7 +9,7 @@ If lumispy is installed, then LumiSpectrum will be used as the signal_type.
 
 .. code-block:: python
 
-    >>> sig = hs.load("file.xml", reader="Jobin Yvon")
+    >>> sig = hs.load("file.xml", reader="JobinYvon")
 
 Specifying the reader is necessary as :ref:`EMPAD <empad-format>`
 also uses the .xml file-extension.

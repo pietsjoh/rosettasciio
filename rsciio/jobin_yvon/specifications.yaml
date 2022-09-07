@@ -1,4 +1,4 @@
-format_name: 'Jobin Yvon'
+format_name: 'JobinYvon'
 description: 'Reads data from Jobin Yvon xml files'
 full_support: False
 file_extensions: ['xml', 'XML']

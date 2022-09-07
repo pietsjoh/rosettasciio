@@ -4,4 +4,4 @@ full_support: False
 file_extensions: ['xml', 'XML']
 default_extension: 0
 writes: False
-non_uniform_axis: False
+non_uniform_axis: True

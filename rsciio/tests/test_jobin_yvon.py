@@ -18,6 +18,7 @@
 
 import gc
 import pytest
+import importlib.util
 from pathlib import Path
 from copy import deepcopy
 
@@ -44,6 +45,12 @@ testfile_glue_path = (testfile_dir / "jobinyvon_test_spec_range.xml").resolve()
 testfile_spec_count_path = (
     testfile_dir / "jobinyvon_test_spec_3s_counts.xml"
 ).resolve()
+
+
+if importlib.util.find_spec("lumispy") is None:
+    lumispy_installed = False
+else:
+    lumispy_installed = True
 
 
 class TestSpec:
@@ -88,6 +95,21 @@ class TestSpec:
         del cls.s_abs_wn
         del cls.s_ev
         gc.collect()
+
+    @pytest.mark.skipif(lumispy_installed, reason="lumispy is installed")
+    def test_signal1D(self):
+        hyperspy = pytest.importorskip("hyperspy", reason="hyperspy not installed")
+        assert isinstance(self.s, hyperspy._signals.signal1d.Signal1D)
+
+    def test_lumispectrum(self):
+        lum = pytest.importorskip("lumispy", reason="lumispy not installed")
+        s_lum = hs.load(
+            testfile_spec_wavelength_path,
+            reader="JobinYvon",
+            use_uniform_signal_axis=True,
+        )
+        assert isinstance(s_lum, lum.signals.luminescence_spectrum.LumiSpectrum)
+        del s_lum
 
     def test_intensity_count_unit(self):
         assert self.s_count.metadata.Signal.quantity == "Intensity (Counts)"
@@ -305,6 +327,7 @@ class TestSpec:
         )
         assert metadata["General"]["time"] == "16:26:24"
         assert metadata["Signal"]["quantity"] == "Intensity (Counts/s)"
+        assert metadata["Signal"]["signal_dimension"] == 1
         np.testing.assert_allclose(
             metadata["Acquisition_instrument"]["Detector"]["binning"], 30
         )

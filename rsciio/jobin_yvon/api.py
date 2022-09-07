@@ -33,17 +33,17 @@ class JobinYvonXMLReader:
     The file is read using xml.etree.ElementTree.
     Each element can have the following attributes: attrib, tag, text.
     Moreover, non-leaf-elements are iterable (iterate over child-nodes).
-    In this specific format, the tags not useful to extract information.
+    In this specific format, the tags do not contain useful information.
     Instead, the "ID"-entry in attrib is used to identify the sort of information.
     The IDs are consistent for the tested files.
 
     Parameters
     ----------
     file_path: pathlib.Path
-        path to the to be read file
+        Path to the to be read file.
 
-    use_uniform_wavelength_axis: bool
-        decides whether to use uniform or non-uniform data axis
+    use_uniform_signal_axis: bool, default=True
+        Decides whether to use uniform or non-uniform data axis.
 
     Attributes
     ----------
@@ -54,9 +54,9 @@ class JobinYvonXMLReader:
     parse_file, get_original_metadata, get_axes, get_data, map_metadata
     """
 
-    def __init__(self, file_path, use_uniform_wavelength_axis=True, **kwargs):
+    def __init__(self, file_path, use_uniform_signal_axis=True):
         self._file_path = file_path
-        self._use_uniform_wavelength_axis = use_uniform_wavelength_axis
+        self._use_uniform_signal_axis = use_uniform_signal_axis
         self._reverse_wavelength = False
 
         self._lumispy_installed = True
@@ -108,9 +108,9 @@ class JobinYvonXMLReader:
         Parameters
         ----------
         xml_element: xml.etree.ElementTree.Element
-            head level metadata element
+            Head level metadata element.
         tag: Str
-            is used as key in original_metadata dictionary
+            Used as the corresponding key in the original_metadata dictionary.
 
         Example
         -------
@@ -284,9 +284,9 @@ class JobinYvonXMLReader:
         Parameters
         ----------
         array: np.ndarray
-            contains the axes data points
+            Contains the axes data points.
         name: Str
-            name of the axis
+            Name of the axis.
         """
         assert isinstance(array, np.ndarray)
         assert hasattr(array, "size")
@@ -299,14 +299,11 @@ class JobinYvonXMLReader:
             min_array = np.amin(array)
             if not np.isclose(min_array, 0):
                 rel_diff_compare = abs_diff_compare / min_array
-                if rel_diff_compare > 0.01 and self._use_uniform_wavelength_axis:
+                if rel_diff_compare > 0.01 and self._use_uniform_signal_axis:
                     _logger.warning(
                         f"The relative variation of the {name}-axis-scale ({rel_diff_compare}) is greater than 1%. Using a non-uniform-axis is recommended."
                     )
-            if (
-                not np.isclose(abs_diff_compare, 0)
-                and self._use_uniform_wavelength_axis
-            ):
+            if not np.isclose(abs_diff_compare, 0) and self._use_uniform_signal_axis:
                 _logger.warning(
                     f"The difference between consecutive entrys (scale) of the {name}-axis varies (from {abs_diff_begin} to {abs_diff_end} between the first 2 and last 2 entrys, difference: {abs_diff_compare}). {scale} will be used for scale. Consider using a non-uniform-axis."
                 )
@@ -318,9 +315,9 @@ class JobinYvonXMLReader:
         Parameters
         ----------
         xml_element: xml.etree.ElementTree.Element
-            head level metadata element
+            Head level metadata element.
         tag: Str
-            axis name
+            Axis name.
         """
         # assert measurement_type == "SpIm"
         has_nav = True
@@ -353,7 +350,7 @@ class JobinYvonXMLReader:
         Parameters
         ----------
         xml_element: xml.etree.ElementTree.Element
-            head level metadata element
+            Head level metadata element.
         """
         for child in xml_element:
             id = self._get_id(child)
@@ -371,9 +368,9 @@ class JobinYvonXMLReader:
         Parameters
         ----------
         xml_element: xml.etree.ElementTree.Element
-            head level metadata element
+            Head level metadata element.
         tag: Str
-            axis name
+            Axis name.
         """
         wavelength_dict = dict()
         wavelength_dict["navigate"] = False
@@ -384,7 +381,7 @@ class JobinYvonXMLReader:
                 if wavelength_array[0] > wavelength_array[1]:
                     wavelength_array = wavelength_array[::-1]
                     self._reverse_wavelength = True
-                if self._use_uniform_wavelength_axis:
+                if self._use_uniform_signal_axis:
                     wavelength_dict["scale"] = self._get_scale(
                         wavelength_array, "wavelength"
                     )
@@ -754,18 +751,18 @@ class JobinYvonXMLReader:
             pass
 
 
-def file_reader(file_path, use_uniform_wavelength_axis=True, **kwds):
+def file_reader(filename, use_uniform_signal_axis=True, **kwds):
     """Reads a file with Jobin Yvon .xml-format.
 
     Parameters
     ----------
-    use_uniform_wavelength_axis: bool
-        can be specified to choose between non-uniform or uniform signal/data-axis
+    use_uniform_signal_axis: bool, default=True
+        Can be specified to choose between non-uniform or uniform signal-axis.
     """
-    if not isinstance(file_path, Path):
-        file_path = Path(file_path)
+    if not isinstance(filename, Path):
+        filename = Path(filename)
     jy = JobinYvonXMLReader(
-        file_path=file_path, use_uniform_wavelength_axis=use_uniform_wavelength_axis
+        file_path=filename, use_uniform_signal_axis=use_uniform_signal_axis
     )
     jy.parse_file()
     jy.get_original_metadata()

@@ -967,3 +967,15 @@ class TestGlue:
     def test_data(self):
         assert np.isclose(self.s.isig[0].data, 238)
         assert np.isclose(self.s.isig[-1].data, 254.265)
+
+    def test_metadata(self):
+        original_metadata = self.s.original_metadata.as_dictionary()
+        metadata = self.s.metadata.as_dictionary()
+
+        np.testing.assert_allclose(
+            original_metadata["experimental_setup"]["Windows"], 4
+        )
+        np.testing.assert_allclose(
+            metadata["Acquisition_instrument"]["Detector"]["glued_spectrum_windows"], 4
+        )
+        assert metadata["Acquisition_instrument"]["Detector"]["glued_spectrum"] == True

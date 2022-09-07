@@ -168,6 +168,7 @@ class JobinYvonXMLReader:
             "Z (µm)",
             "Full time(s)",
             "angle (rad)",
+            "Windows",
         ]
 
         change_to_second_value = [
@@ -723,10 +724,21 @@ class JobinYvonXMLReader:
             "angle (rad)",
         )
 
+        ## extra units here, because rad vs. deg
         if "angle (rad)" in self.original_metadata["experimental_setup"]:
             self.metadata["Acquisition_instrument"]["Spectral_image"][
                 "angle_units"
             ] = "rad"
+
+        if "Windows" in self.original_metadata["experimental_setup"]:
+            self.metadata["Acquisition_instrument"]["Detector"]["glued_spectrum"] = True
+            self.metadata["Acquisition_instrument"]["Detector"][
+                "glued_spectrum_windows"
+            ] = self.original_metadata["experimental_setup"]["Windows"]
+        else:
+            self.metadata["Acquisition_instrument"]["Detector"][
+                "glued_spectrum"
+            ] = False
 
         ## calculate and set integration time
         try:

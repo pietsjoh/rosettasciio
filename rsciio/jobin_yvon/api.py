@@ -59,10 +59,11 @@ class JobinYvonXMLReader:
         self._use_uniform_signal_axis = use_uniform_signal_axis
         self._reverse_wavelength = False
 
-        self._lumispy_installed = True
         if importlib.util.find_spec("lumispy") is None:
             self._lumispy_installed = False
             _logger.warning("Cannot find package lumispy, using '' as signal_type.")
+        else:
+            self._lumispy_installed = True
 
     @staticmethod
     def _get_id(xml_element):
@@ -478,15 +479,6 @@ class JobinYvonXMLReader:
                 self.data = np.reshape(self.data, (self._nav1_size, num_cols))
 
     @property
-    def _record_by(self):
-        if self._measurement_type == "Spectrum":
-            return "spectrum"
-        elif self._measurement_type == "SpIm":
-            return "image"
-        else:
-            return ""
-
-    @property
     def _signal_type(self):
         if self._lumispy_installed:
             return "Luminescence"
@@ -534,7 +526,6 @@ class JobinYvonXMLReader:
         except KeyError:
             pass
 
-        self.metadata["Signal"]["record_by"] = self._record_by
         try:
             intensity_axis = self.original_metadata["experimental_setup"]["signal type"]
             intensity_units = self.original_metadata["experimental_setup"][
@@ -552,7 +543,9 @@ class JobinYvonXMLReader:
             self.metadata["Signal"][
                 "quantity"
             ] = f"{intensity_axis} ({intensity_units})"
-            self.metadata["Signal"]["signal_type"] = self._signal_type
+
+        self.metadata["Signal"]["signal_type"] = self._signal_type
+        self.metadata["Signal"]["signal_dimension"] = 1
 
         self._set_metadata(
             self.metadata["Sample"],

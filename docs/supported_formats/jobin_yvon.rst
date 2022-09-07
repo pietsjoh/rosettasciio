@@ -3,7 +3,7 @@
 Jobin Yvon
 ----------
 
-Currently, RosettaSciIO can only read ``.xml`` format from Jobin-Yvon.
+Currently, RosettaSciIO can only read the ``.xml`` format from Jobin-Yvon.
 If Lumispy is installed, then ``LumiSpectrum`` will be used as the ``signal_type``.
 
 

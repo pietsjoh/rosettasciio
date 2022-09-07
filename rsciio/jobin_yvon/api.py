@@ -228,8 +228,8 @@ class JobinYvonXMLReader:
                 new_grating_key_name
             ] = self.original_metadata["experimental_setup"]["Grating"]
             del self.original_metadata["experimental_setup"]["Grating"]
-        except KeyError:
-            pass
+        except KeyError: # pragma: no cover
+            pass # pragma: no cover
 
         ## add percentage for filter key name
         new_filter_key_name = "ND Filter (%)"
@@ -238,8 +238,8 @@ class JobinYvonXMLReader:
                 new_filter_key_name
             ] = self.original_metadata["experimental_setup"]["ND Filter"]
             del self.original_metadata["experimental_setup"]["ND Filter"]
-        except KeyError:
-            pass
+        except KeyError: # pragma: no cover
+            pass # pragma: no cover
 
     def get_original_metadata(self):
         """Extracts metadata from file."""
@@ -263,12 +263,12 @@ class JobinYvonXMLReader:
             self.original_metadata["experimental_setup"][
                 "measurement_type"
             ] = self._measurement_type
-        except AttributeError:
-            pass
+        except AttributeError: # pragma: no cover
+            pass # pragma: no cover
         try:
             self.original_metadata["experimental_setup"]["title"] = self._title
-        except AttributeError:
-            pass
+        except AttributeError: # pragma: no cover
+            pass # pragma: no cover
         try:
             self.original_metadata["experimental_setup"]["angle (rad)"] = self._angle
         except AttributeError:
@@ -301,10 +301,10 @@ class JobinYvonXMLReader:
             min_array = np.amin(array)
             if not np.isclose(min_array, 0):
                 rel_diff_compare = abs_diff_compare / min_array
-                if rel_diff_compare > 0.01 and self._use_uniform_signal_axis:
+                if rel_diff_compare > 0.01 and self._use_uniform_signal_axis: # pragma: no cover
                     _logger.warning(
                         f"The relative variation of the {name}-axis-scale ({rel_diff_compare}) is greater than 1%. Using a non-uniform-axis is recommended."
-                    )
+                    ) # pragma: no cover
             if not np.isclose(abs_diff_compare, 0) and self._use_uniform_signal_axis:
                 _logger.warning(
                     f"The difference between consecutive entrys (scale) of the {name}-axis varies (from {abs_diff_begin} to {abs_diff_end} between the first 2 and last 2 entrys, difference: {abs_diff_compare}). {scale} will be used for scale. Consider using a non-uniform-axis."
@@ -405,12 +405,12 @@ class JobinYvonXMLReader:
                 elif "/" not in units and units[-1] == "m":
                     wavelength_dict["name"] = "Wavelength"
                     wavelength_dict["units"] = units
-                else:
+                else: # pragma: no cover
                     _logger.warning(
                         "Cannot extract type of signal axis from units, using wavelength as name."
-                    )
-                    wavelength_dict["name"] = "Wavelength"
-                    wavelength_dict["units"] = units
+                    ) # pragma: no cover
+                    wavelength_dict["name"] = "Wavelength" # pragma: no cover
+                    wavelength_dict["units"] = units # pragma: no cover
         self.axes["wavelength_dict"] = wavelength_dict
 
     def _sort_nav_axes(self):
@@ -475,8 +475,8 @@ class JobinYvonXMLReader:
                     )
                 else:
                     self.data = np.reshape(self.data, (self._nav2_size, num_cols))
-            elif self._has_nav1 and not self._has_nav2:
-                self.data = np.reshape(self.data, (self._nav1_size, num_cols))
+            elif self._has_nav1 and not self._has_nav2: # pragma: no cover
+                self.data = np.reshape(self.data, (self._nav1_size, num_cols)) # pragma: no cover
 
     @property
     def _signal_type(self):
@@ -523,16 +523,16 @@ class JobinYvonXMLReader:
             date, time = self.original_metadata["date"]["Acquired"].split(" ")
             self.metadata["General"]["date"] = date
             self.metadata["General"]["time"] = time
-        except KeyError:
-            pass
+        except KeyError: # pragma: no cover
+            pass # pragma: no cover
 
         try:
             intensity_axis = self.original_metadata["experimental_setup"]["signal type"]
             intensity_units = self.original_metadata["experimental_setup"][
                 "signal units"
             ]
-        except KeyError:
-            pass
+        except KeyError: # pragma: no cover
+            pass # pragma: no cover
         else:
             if intensity_axis == "Intens":
                 intensity_axis = "Intensity"
@@ -739,8 +739,8 @@ class JobinYvonXMLReader:
                 self.original_metadata["experimental_setup"]["Accumulations"]
                 * self.original_metadata["experimental_setup"]["Acq. time (s)"]
             )
-        except KeyError:
-            pass
+        except KeyError: # pragma: no cover
+            pass # pragma: no cover
         else:
             self.metadata["Acquisition_instrument"]["Detector"][
                 "integration_time"
@@ -751,8 +751,8 @@ class JobinYvonXMLReader:
             self.metadata["Acquisition_instrument"]["Laser"]["Filter"][
                 "optical_density"
             ] /= 100
-        except KeyError:
-            pass
+        except KeyError: # pragma: no cover
+            pass # pragma: no cover
 
         ## convert entrance_hole_width to mm
         try:
@@ -764,8 +764,8 @@ class JobinYvonXMLReader:
             ] = self.metadata["Acquisition_instrument"]["Spectrometer"][
                 "entrance_slit_width"
             ]
-        except KeyError:
-            pass
+        except KeyError: # pragma: no cover
+            pass # pragma: no cover
 
 
 def file_reader(filename, use_uniform_signal_axis=True, **kwds):

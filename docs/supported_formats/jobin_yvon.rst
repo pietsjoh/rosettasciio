@@ -1,7 +1,7 @@
 .. _jobin_yvon-format:
 
-Horiba Jobin Yvon
------------------
+Horiba Jobin Yvon LabSpec
+-------------------------
 
 Reader for spectroscopy data saved using Horiba Jobin Yvon's LabSpec software.
 Currently, RosettaSciIO can only read the ``.xml`` format from Jobin Yvon.
